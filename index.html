@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MobileMoney - form</title>
+    <link rel="stylesheet" href="./assets/css/variableCSS.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/form.css">
+    <script src="./assets/js/form.js" defer></script>
+    <script src="./assets/js/main.js" defer></script>
+</head>
+
+<body>
+    <div class="conteneur">
+        <form action="#" class="login form">
+            <fieldset>
+                <legend>Connexion</legend>
+                <div class="note">
+                    <p>Entrez votre numéro de téléphone et votre mot de passe pour vous connecter. Vos données restent
+                        confidentielles.</p>
+                    <p class="small">Pas encore de compte ? Cliquez sur "S'Inscrire" pour créer un compte.</p>
+                </div>
+                <div class="group">
+                    <label for="login-tel">Numero de telephone</label>
+                    <input type="number" placeholder="" minlength="20" id="login-tel" required>
+                </div>
+                <div class="group">
+                    <label for="login-password">Mot de passe</label>
+                    <input type="password" placeholder="" id="login-password" required>
+                </div>
+                <div class="group-dif">
+                    <span>
+                        <input type="checkbox" placeholder="" id="me">
+                        <label for="me">Ce souvenir de moi ?</label>
+                    </span>
+                    <span class="desc">Permet au syste de sauvegader votre connexion pour ne plus le faire
+                        prochainement</span>
+                </div>
+                <div class="group-end">
+                    <button type="submit">Se connecter</button>
+                    <button type="button">S'Inscrire</button>
+                </div>
+            </fieldset>
+        </form>
+        <form action="#" class="sign-in form mask">
+            <fieldset>
+                <legend>Cree un compte</legend>
+
+                <div class="note">
+                    <p>Créez votre compte en renseignant des informations exactes et logique.</p>
+                    <p class="small">Déjà inscrit ? Cliquez sur "Se connecter" pour accéder à votre compte.</p>
+                </div>
+
+                <div class="group">
+                    <label for="sign-nom">Nom</label>
+                    <input type="text" placeholder="" id="sign-nom" name="nom" maxlength="30" required>
+                </div>
+                <div class="group">
+                    <label for="sign-prenom">Prénom</label>
+                    <input type="text" placeholder="" id="sign-prenom" name="prenom" maxlength="30" required>
+                </div>
+                <div class="group">
+                    <label for="sign-phone">Téléphone</label>
+                    <input type="tel" placeholder="" id="sign-phone" name="phone" maxlength="15"
+                        pattern="^\+?[0-9\s\-\(\)]{7,15}$" required>
+                </div>
+                <div class="group">
+                    <label for="sign-email">Email</label>
+                    <input type="email" placeholder="" id="sign-email" name="email" maxlength="100">
+                </div>
+
+                <div class="group">
+                    <label for="sign-password">Mot de passe</label>
+                    <input type="password" placeholder="" id="sign-password" name="password" minlength="3" required>
+                </div>
+                <div class="group-end">
+                    <button type="submit" cl>S'inscrire</button>
+                    <button type="button" class="btn">Se connecter</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</body>
+
+</html>
+
+
+
+
