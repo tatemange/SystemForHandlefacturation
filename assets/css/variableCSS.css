@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: f;
-  src: url(../fonts/GoogleSans-Regular.ttf);
+  src: url(../fonts/ProductSans-Regular.ttf);
 }
 
 
@@ -15,6 +15,7 @@
 
   /* Thèmes (base = sombre) */
   --background: #000000;
+  --body-bg: rgba(0, 0, 0, 0.9);
   --label: #ffffff;
   --background-light: rgba(255, 255, 255, 0.05);
   --background-dark: rgba(0, 0, 0, 0.1);
@@ -38,7 +39,7 @@
   --font-size-small: 0.875rem;
   --font-size-base: 1rem;
   --font-size-large: 1.25rem;
-  --font-title: 3rem;
+  --font-title: clamp(1rem, 3.5vw, 3rem);
 
   /* Ombres & effets */
   --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -77,6 +78,7 @@
   :root {
     /* Base = clair */
     --background: #ffffff;
+    --body-bg: rgba(255, 255, 255, 0.9);
     --label: #252525;
     --background-light: rgba(0, 0, 0, 0.1);
     --background-dark: rgba(0, 0, 0, 0.15);

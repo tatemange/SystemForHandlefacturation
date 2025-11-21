@@ -1,0 +1,82 @@
+<!-- ---------------------------
+Vue + AJAX: clients.html
+--------------------------- -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion des Clients</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <h2>Liste des clients</h2>
+
+    <table border="1" id="clientsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Téléphone</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h2>Ajouter un client</h2>
+    <form id="addClientForm">
+        <input type="text" name="nom" placeholder="Nom" required>
+        <input type="text" name="prenom" placeholder="Prénom" required>
+        <input type="text" name="numero_telephone" placeholder="Téléphone" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <button type="submit">Ajouter</button>
+    </form>
+
+    <script src="../js/jquery.min.js"></script>
+    <script>
+        function loadClients(){
+            $.getJSON('../php/controllers/ClientController.php?action=liste', function(data){
+                let tbody = '';
+                data.forEach(client => {
+                    tbody += `<tr>
+                        <td>${client.id}</td>
+                        <td>${client.nom}</td>
+                        <td>${client.prenom}</td>
+                        <td>${client.numero_telephone}</td>
+                        <td>${client.email}</td>
+                        <td>
+                            <button onclick="deleteClient(${client.id})">Supprimer</button>
+                        </td>
+                    </tr>`;
+                });
+                $('#clientsTable tbody').html(tbody);
+            });
+        }
+
+        function deleteClient(id){
+            $.post('../php/controllers/ClientController.php?action=supprimer', {id: id}, function(res){
+                if(res.success){ loadClients(); }
+                else { alert('Erreur lors de la suppression'); }
+            }, 'json');
+        }
+
+        $('#addClientForm').submit(function(e){
+            e.preventDefault();
+            $.post('../php/controllers/ClientController.php?action=ajouter', $(this).serialize(), function(res){
+                if(res.success){
+                    loadClients();
+                    $('#addClientForm')[0].reset();
+                } else {
+                    alert('Erreur lors de l'ajout');
+                }
+            }, 'json');
+        });
+
+        $(document).ready(function(){
+            loadClients();
+        });
+    </script>
+</body>
+</html>

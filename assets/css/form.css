@@ -1,6 +1,6 @@
 
 .form {
-  width: 400px;
+  width: clamp(310px, 30vw, 410px);
   position: relative;
 }
 
@@ -57,7 +57,6 @@ form .group input {
   background-color: transparent;
   outline: none;
   width: 100%;
-  box-shadow: var(--box-shadow-input);
   display: flex;
   align-items: center;
   justify-content: stretch;

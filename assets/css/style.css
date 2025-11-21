@@ -6,11 +6,27 @@ body {
   min-height: 100vh;
 }
 
+body::before {
+  content: "";
+  width: 100vw;
+  height: 100vh;
+  background-image: url(../images/1.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
+  position: absolute;
+  aspect-ratio: 1;
+}
+
 .conteneur {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--body-bg);
+  width: 100vw;
+  min-height: 100vh;
+  backdrop-filter: blur(50px) saturate(300%);
+  padding: 1rem;
 }
 
 
-  

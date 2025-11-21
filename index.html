@@ -34,7 +34,7 @@
                         <input type="checkbox" placeholder="" id="me">
                         <label for="me">Ce souvenir de moi ?</label>
                     </span>
-                    <span class="desc">Permet au systeme de sauvegader votre connexion et ne plus vous demander vos attribut de connexion (deconseiller).</span>
+                    <span class="desc">Autorise l'application a sauvegader votre connexion en memoire (deconseiller).</span>
                 </div>
                 <div class="group-end">
                     <button type="submit">Se connecter</button>
@@ -73,15 +73,25 @@
                     <input type="email" placeholder="" id="sign-email" name="email" maxlength="100">
                 </div>
 
-                <div class="group">
-                    <label for="sign-userName">Nom d'utilisateur</label>
-                    <input type="email" placeholder="" id="sign-userName" name="userName" maxlength="100" required>
+                <div class="doubleGroup">
+                    <div class="group">
+                        <label for="sign-userName">Nom d'utilisateur</label>
+                        <input type="email" placeholder="" id="sign-userName" name="userName" maxlength="100" required>
+                    </div>
+
+                    <div class="group">
+                        <label for="sign-password">Mot de passe</label>
+                        <input type="password" placeholder="" id="sign-password" name="password" minlength="3" required>
+                    </div>
+                </div>
+                <div class="group-dif">
+                    <span>
+                        <input type="checkbox" placeholder="" id="me2">
+                        <label for="me2">Visualiser le mot de passe</label>
+                    </span>
+                    <span class="desc">Afficher le mot de passe</span>
                 </div>
 
-                <div class="group">
-                    <label for="sign-password">Mot de passe</label>
-                    <input type="password" placeholder="" id="sign-password" name="password" minlength="3" required>
-                </div>
                 <div class="group-end">
                     <button type="submit" cl>S'inscrire</button>
                     <button type="button" class="btn">Se connecter</button>
