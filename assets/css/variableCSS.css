@@ -8,7 +8,8 @@
 
 :root {
   /* Couleurs principales */
-  --first-color: #3289fc;
+  --first-color: #3e68ff;
+  --first-text-color: #3367D1;
   --second-color: #e94343;
   --accent-color: #4cdb94;
 
@@ -32,11 +33,12 @@
 
   /* Typographie */
   --font-main: f, 'SF Pro rounded', system-ui, sans-serif;
-  --label-second: #86868b;
+  --label-second: #A4A4A4;
   --label-tertiary: #bbbbbb;
   --font-size-small: 0.875rem;
   --font-size-base: 1rem;
   --font-size-large: 1.25rem;
+  --font-title: 3rem;
 
   /* Ombres & effets */
   --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -79,6 +81,8 @@
     --background-light: rgba(0, 0, 0, 0.1);
     --background-dark: rgba(0, 0, 0, 0.15);
     --border-color: rgba(0, 0, 0, 0.2);
+    --border-color: #d9d9d9;
+    --box-shadow-input: 0 0 10px #fff;
     --border: 1px solid var(--border-color);
     --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
     --shadow-strong: 0 4px 20px rgba(0, 0, 0, 0.2);

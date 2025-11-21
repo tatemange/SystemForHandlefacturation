@@ -18,13 +18,12 @@
             <fieldset>
                 <legend>Connexion</legend>
                 <div class="note">
-                    <p>Entrez votre numéro de téléphone et votre mot de passe pour vous connecter. Vos données restent
-                        confidentielles.</p>
+                    <p>Connectez-vous pour gerer vos factures, cliens et activites en toute serenite. Vos données restent confidentielles.</p>
                     <p class="small">Pas encore de compte ? Cliquez sur "S'Inscrire" pour créer un compte.</p>
                 </div>
                 <div class="group">
-                    <label for="login-tel">Numero de telephone</label>
-                    <input type="number" placeholder="" minlength="20" id="login-tel" required>
+                    <label for="login-tel">Numero de telephone ou nom d'utilisateur</label>
+                    <input type="text" placeholder="" minlength="20" id="login-tel" required>
                 </div>
                 <div class="group">
                     <label for="login-password">Mot de passe</label>
@@ -35,8 +34,7 @@
                         <input type="checkbox" placeholder="" id="me">
                         <label for="me">Ce souvenir de moi ?</label>
                     </span>
-                    <span class="desc">Permet au syste de sauvegader votre connexion pour ne plus le faire
-                        prochainement</span>
+                    <span class="desc">Permet au systeme de sauvegader votre connexion et ne plus vous demander vos attribut de connexion (deconseiller).</span>
                 </div>
                 <div class="group-end">
                     <button type="submit">Se connecter</button>
@@ -49,26 +47,35 @@
                 <legend>Cree un compte</legend>
 
                 <div class="note">
-                    <p>Créez votre compte en renseignant des informations exactes et logique.</p>
-                    <p class="small">Déjà inscrit ? Cliquez sur "Se connecter" pour accéder à votre compte.</p>
+                    <p>Créez votre compte en renseignant les informations suivants.</p>
+                    <p class="small">Déjà inscrit ? Cliquez sur "Se connecter".</p>
+                </div>
+                
+                <div class="doubleGroup">
+                    <div class="group">
+                        <label for="sign-nom">Nom</label>
+                        <input type="text" placeholder="" id="sign-nom" name="nom" maxlength="30" required>
+                    </div>
+                    <div class="group">
+                        <label for="sign-prenom">Prénom</label>
+                        <input type="text" placeholder="" id="sign-prenom" name="prenom" maxlength="30" required>
+                    </div>
                 </div>
 
-                <div class="group">
-                    <label for="sign-nom">Nom</label>
-                    <input type="text" placeholder="" id="sign-nom" name="nom" maxlength="30" required>
-                </div>
-                <div class="group">
-                    <label for="sign-prenom">Prénom</label>
-                    <input type="text" placeholder="" id="sign-prenom" name="prenom" maxlength="30" required>
-                </div>
                 <div class="group">
                     <label for="sign-phone">Téléphone</label>
                     <input type="tel" placeholder="" id="sign-phone" name="phone" maxlength="15"
                         pattern="^\+?[0-9\s\-\(\)]{7,15}$" required>
                 </div>
+                
                 <div class="group">
-                    <label for="sign-email">Email</label>
+                    <label for="sign-email">Email ( facultatif )</label>
                     <input type="email" placeholder="" id="sign-email" name="email" maxlength="100">
+                </div>
+
+                <div class="group">
+                    <label for="sign-userName">Nom d'utilisateur</label>
+                    <input type="email" placeholder="" id="sign-userName" name="userName" maxlength="100" required>
                 </div>
 
                 <div class="group">
@@ -80,6 +87,7 @@
                     <button type="button" class="btn">Se connecter</button>
                 </div>
             </fieldset>
+            
         </form>
     </div>
 </body>

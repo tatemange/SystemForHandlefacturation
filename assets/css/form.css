@@ -19,11 +19,16 @@ form fieldset {
 
 form legend {
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: var(--font-title);
   width: 100%;
   text-align: center;
 }
 
+form .note {
+  display: flex;
+  gap: .5rem;
+  flex-direction: column;
+}
 form .note p {
   text-align: center;
 }
@@ -31,7 +36,6 @@ form .note p {
 form .note .small {
   color: var(--label-second);
   font-size: .85em;
-  margin-top: 5px;  
 }
 
 form .group {
@@ -49,19 +53,26 @@ form .group-dif select option {
 
 form .group-dif select,
 form .group input {
-  border: var(--border);
-  height: 50px;
-  padding: 0 1rem;
   border-radius: 50px;
   background-color: transparent;
   outline: none;
   width: 100%;
+  box-shadow: var(--box-shadow-input);
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  height: 3.250rem;
+  line-height: 1.5rem;
+  border: var(--border);
+  padding: 0 20px;
+}
 
+form .group input {
 }
 
 form .group label {
   position: absolute;
-  left: 1rem;
+  left: 20px;
   top: 50%;
   transform: translateY(-50%);
   opacity: 0.7;
@@ -97,7 +108,8 @@ form .group-end button {
   outline: none;
   background-color: var(--first-color);
   color: white;
-  height: 40px;
+  height: 50px;
+  font-size: 1rem;
   border: none;
   border-radius: 30px;
   cursor: pointer;
