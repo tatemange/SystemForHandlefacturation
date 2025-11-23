@@ -1,0 +1,674 @@
+/* ========================================
+   FONT FACE
+   ======================================== */
+@font-face {
+    font-family: f;
+    src: url(../fonts/ProductSans-Regular.ttf);
+}
+
+/* ========================================
+   VARIABLES CSS - Fusion Apple + Votre Système
+   ======================================== */
+:root {
+    /* Couleurs principales */
+    --first-color: #3e68ff;
+    --first-text-color: #3367D1;
+    --second-color: #e94343;
+    --accent-color: #4cdb94;
+
+    /* Couleurs Apple intégrées */
+    --apple-blue: #0071e3;
+    --apple-blue-hover: #0077ED;
+
+    /* Thèmes (base = sombre) */
+    --background: #000000;
+    --btn-bg: white;
+    --btn-color: black;
+    --body-bg: rgba(0, 0, 0, 0.9);
+    --label: #ffffff;
+    --background-light: rgba(255, 255, 255, 0.05);
+    --background-dark: rgba(0, 0, 0, 0.1);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border: 1px solid var(--border-color);
+    --black: black;
+    --white: white;
+
+    /* Variables Apple pour le dashboard */
+    --background-primary: #ffffff;
+    --background-secondary: #f5f5f7;
+    --background-tertiary: #fafafa;
+    --text-primary: #1d1d1f;
+    --text-secondary: #86868b;
+    --text-tertiary: #6e6e73;
+    --border-light: #d2d2d7;
+    --separator: rgba(0, 0, 0, 0.1);
+
+    /* Variantes "reverse" (clair) */
+    --background-reverse: #ffffff;
+    --label-reverse: #000000;
+    --background-light-reverse: rgba(0, 0, 0, 0.05);
+    --background-dark-reverse: rgba(0, 0, 0, 0.1);
+    --border-color-reverse: rgba(0, 0, 0, 0.1);
+    --border-reverse: 1px solid var(--border-color-reverse);
+
+    /* Sidebar */
+    --sidebar-bg: #000000;
+    --sidebar-text: #f5f5f7;
+    --sidebar-hover: rgba(255, 255, 255, 0.1);
+    --sidebar-active: #0071e3;
+
+    /* Typographie */
+    --font-main: f, 'SF Pro Text', 'SF Pro rounded', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --label-second: #9b9b9b;
+    --label-tertiary: #bbbbbb;
+    --font-size-small: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-large: 1.25rem;
+    --font-title: clamp(1.5rem, 3vw, 3rem);
+
+    /* Couleurs de statut */
+    --success: #30d158;
+    --success-color: #2edd86;
+    --warning: #ff9f0a;
+    --danger: #ff3b30;
+    --error-color: #e94545;
+    --info: #0a84ff;
+    --on-success: #000000;
+    --on-error: #ffffff;
+
+    /* Ombres & effets */
+    --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.06);
+    --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.2);
+    --shadow-strong: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --shadow-light-reverse: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-strong-reverse: 0 4px 20px rgba(0, 0, 0, 0.2);
+
+    /* Transitions */
+    --t: 0.3s;
+    --transition-fast: 0.2s ease;
+    --transition-slow: 0.5s ease;
+    --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Layout & spacing */
+    --container-width: 1200px;
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 4rem;
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+
+    /* Boutons & radius */
+    --btn-padding: 0.75rem 1.5rem;
+    --btn-radius: 0.375rem;
+    --border-radius: 0.5rem;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+}
+
+/* Basculer automatiquement en mode clair */
+@media (prefers-color-scheme: light) {
+    :root {
+        /* Base = clair */
+        --background: #ffffff;
+        --body-bg: rgba(255, 255, 255, 0.9);
+        --label: #252525;
+        --background-light: rgba(0, 0, 0, 0.1);
+        --background-dark: rgba(0, 0, 0, 0.15);
+        --border-color: #d9d9d9;
+        --box-shadow-input: 0 0 10px #fff;
+        --border: 1px solid var(--border-color);
+        --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
+        --shadow-strong: 0 4px 20px rgba(0, 0, 0, 0.2);
+
+        /* Reverse = sombre */
+        --background-reverse: #000000;
+        --label-reverse: #ffffff;
+        --background-light-reverse: rgba(255, 255, 255, 0.05);
+        --background-dark-reverse: rgba(0, 0, 0, 0.1);
+        --border-color-reverse: rgba(255, 255, 255, 0.1);
+        --border-reverse: 1px solid var(--border-color-reverse);
+        --shadow-light-reverse: 0 2px 8px rgba(0, 0, 0, 0.2);
+        --shadow-strong-reverse: 0 4px 20px rgba(0, 0, 0, 0.4);
+        --btn-bg: black;
+        --btn-color: white;
+    }
+}
+
+/* ========================================
+   RESET & BASE
+   ======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-main);
+    color: currentColor;
+}
+
+body {
+    background: var(--background-secondary);
+    color: var(--text-primary);
+    line-height: 1.47059;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   LAYOUT PRINCIPAL
+   ======================================== */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ========================================
+   SIDEBAR - Style Apple Pure
+   ======================================== */
+.sidebar {
+    width: 240px;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    padding: var(--space-lg) var(--space-md);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+.menu {
+    list-style: none;
+    padding: var(--space-sm);
+    flex: 1;
+}
+
+.menu li {
+    margin-bottom: 2px;
+}
+
+.menu li a {
+    display: flex;
+    align-items: center;
+    padding: var(--space-sm) var(--space-md);
+    color: var(--sidebar-text);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.menu li a i {
+    width: 20px;
+    margin-right: 10px;
+    font-size: 16px;
+    opacity: 0.7;
+}
+
+.menu li a:hover {
+    background: var(--sidebar-hover);
+}
+
+.menu li.active a {
+    background: var(--sidebar-active);
+    font-weight: 500;
+}
+
+.menu li.active a i {
+    opacity: 1;
+}
+
+.sidebar-footer {
+    padding: var(--space-md);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.btn-logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px var(--space-md);
+    background: rgba(255, 59, 48, 0.15);
+    color: #ff453a;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    font-size: 14px;
+    transition: var(--transition-fast);
+}
+
+.btn-logout:hover {
+    background: rgba(255, 59, 48, 0.25);
+}
+
+.btn-logout i {
+    margin-right: var(--space-sm);
+}
+
+/* ========================================
+   MAIN CONTENT
+   ======================================== */
+.main-content {
+    flex: 1;
+    margin-left: 240px;
+    padding: var(--space-xl);
+    max-width: 1440px;
+}
+
+/* ========================================
+   TOP BAR
+   ======================================== */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.page-title h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.user-info strong {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.role-badge {
+    padding: 4px 10px;
+    background: var(--apple-blue);
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+}
+
+/* ========================================
+   STATS GRID (KPI CARDS)
+   ======================================== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.card {
+    background: var(--background-primary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+    transition: var(--transition-base);
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.stat-card {
+    padding: var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.stat-icon.client-color {
+    background: linear-gradient(135deg, #0a84ff 0%, #0071e3 100%);
+}
+
+.stat-icon.invoice-color {
+    background: linear-gradient(135deg, #ff9f0a 0%, #ff8c00 100%);
+}
+
+.stat-icon.money-color {
+    background: linear-gradient(135deg, #30d158 0%, #30b350 100%);
+}
+
+.stat-details h3 {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.stat-details .number {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+}
+
+/* ========================================
+   QUICK ACTIONS
+   ======================================== */
+.quick-actions {
+    margin-bottom: var(--space-xl);
+}
+
+.quick-actions h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+    letter-spacing: -0.3px;
+}
+
+.buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-md);
+}
+
+.btn-action {
+    padding: 14px var(--space-md);
+    background: var(--background-primary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    font-family: inherit;
+}
+
+.btn-action:hover {
+    background: var(--apple-blue);
+    color: white;
+    border-color: var(--apple-blue);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-action i {
+    font-size: 16px;
+}
+
+/* ========================================
+   RECENT TRANSACTIONS
+   ======================================== */
+.recent-transactions {
+    background: var(--background-primary);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    border: 1px solid var(--border-light);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+}
+
+.section-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+.view-all {
+    color: var(--apple-blue);
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 14px;
+    transition: var(--transition-fast);
+}
+
+.view-all:hover {
+    color: var(--apple-blue-hover);
+}
+
+/* ========================================
+   TABLE - Style Apple Minimal
+   ======================================== */
+.table-responsive {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: transparent;
+    border-bottom: 1px solid var(--border-light);
+}
+
+thead th {
+    padding: 10px var(--space-md);
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+tbody tr {
+    border-bottom: 1px solid var(--separator);
+    transition: var(--transition-fast);
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: var(--background-secondary);
+}
+
+tbody td {
+    padding: 12px var(--space-md);
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+/* ========================================
+   STATUS BADGES
+   ======================================== */
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+}
+
+.status-badge.payee {
+    background: rgba(48, 209, 88, 0.12);
+    color: #30b350;
+}
+
+.status-badge.en_attente {
+    background: rgba(255, 159, 10, 0.12);
+    color: #f18500;
+}
+
+.status-badge.annulee {
+    background: rgba(255, 59, 48, 0.12);
+    color: #d93025;
+}
+
+.status-badge.brouillon {
+    background: rgba(134, 134, 139, 0.12);
+    color: #6e6e73;
+}
+
+/* ========================================
+   BUTTONS - Style Apple
+   ======================================== */
+.btn-small {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    margin-right: 4px;
+    background: var(--background-secondary);
+    color: var(--text-primary);
+}
+
+.btn-small:hover {
+    background: var(--apple-blue);
+    color: white;
+}
+
+.btn-small.view:hover {
+    background: var(--info);
+}
+
+.btn-small.print:hover {
+    background: var(--text-secondary);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 220px;
+    }
+
+    .main-content {
+        margin-left: 220px;
+        padding: var(--space-lg);
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+    }
+
+    .sidebar-header h2 {
+        display: none;
+    }
+
+    .menu li a span {
+        display: none;
+    }
+
+    .menu li a {
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .menu li a i {
+        margin-right: 0;
+    }
+
+    .btn-logout span {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 70px;
+        padding: var(--space-md);
+    }
+
+    .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-md);
+    }
+
+    .page-title h1 {
+        font-size: 22px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .buttons-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: var(--space-sm);
+    }
+
+    table {
+        font-size: 13px;
+    }
+
+    thead th,
+    tbody td {
+        padding: 10px var(--space-sm);
+    }
+
+    .stat-card {
+        padding: var(--space-md);
+    }
+
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+}
