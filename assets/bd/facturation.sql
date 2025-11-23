@@ -137,6 +137,37 @@ CREATE TABLE `SERVICE_PRODUIT` (
   `description` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+
+
+-- 
+-- table admin
+-- 
+
+CREATE TABLE `ADMIN` (
+  `id_admin` INT(11) NOT NULL,
+  `nom` VARCHAR(50) NOT NULL,
+  `prenom` VARCHAR(50) DEFAULT NULL,
+  `username` VARCHAR(50) NOT NULL UNIQUE,
+  `telephone` VARCHAR(20) DEFAULT NULL,
+  `email` VARCHAR(100) DEFAULT NULL,
+  `mot_de_passe` VARCHAR(255) NOT NULL,
+  `role` ENUM('SUPER_ADMIN', 'ADMIN', 'GESTIONNAIRE') NOT NULL DEFAULT 'ADMIN',
+  `date_creation` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `dernier_login` DATETIME DEFAULT NULL,
+  `status` ENUM('ACTIF', 'INACTIF', 'SUSPENDU') NOT NULL DEFAULT 'ACTIF'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+ALTER TABLE `ADMIN`
+  ADD PRIMARY KEY (`id_admin`),
+  ADD KEY `idx_admin_username` (`username`),
+  ADD KEY `idx_admin_email` (`email`);
+
+ALTER TABLE `ADMIN`
+  MODIFY `id_admin` INT(11) NOT NULL AUTO_INCREMENT;
+
+
 --
 -- Index pour les tables déchargées
 --

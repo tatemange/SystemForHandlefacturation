@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="./assets/css/form.css">
     <script src="./assets/js/form.js" defer></script>
     <script src="./assets/js/main.js" defer></script>
+    <script src="./assets/js/admin.js" defer></script>
 </head>
 
 <body>
@@ -18,70 +19,83 @@
             <fieldset>
                 <legend>Connexion</legend>
                 <div class="note">
-                    <p>Connectez-vous pour gerer vos factures, cliens et activites en toute serenite. Vos données restent confidentielles.</p>
-                    <p class="small">Pas encore de compte ? Cliquez sur "S'Inscrire" pour créer un compte.</p>
+                    <p>Connectez-vous pour gérer vos factures, vos clients et vos activités en toute tranquillité. La
+                        confidentialité de vos données est pleinement garantie.</p>
+                    <!-- <p class="small">Pas encore de compte ? Cliquez sur "S'Inscrire" pour créer un compte.</p> -->
                 </div>
                 <div class="group">
-                    <label for="login-tel">Numero de telephone ou nom d'utilisateur</label>
-                    <input type="text" placeholder="" minlength="20" id="login-tel" required>
+                    <label for="login-tel">Numéro de téléphone ou nom d'utilisateur</label>
+                    <input type="text" placeholder="" name="login" minlength="1" id="login-tel" required>
                 </div>
                 <div class="group">
                     <label for="login-password">Mot de passe</label>
-                    <input type="password" placeholder="" id="login-password" required>
+                    <input type="password" placeholder="" name="login_password" id="login-password" required>
                 </div>
+
+                <!-- <div class="group-dif">
+                    <a href="#">Mot de passe oublié ?</a>
+                </div> -->
+
                 <div class="group-dif">
                     <span>
-                        <input type="checkbox" placeholder="" id="me">
-                        <label for="me">Ce souvenir de moi ?</label>
+                        <input type="checkbox" placeholder="" id="saveConnexion">
+                        <label for="saveConnexion">Se souvenir de moi ?</label>
                     </span>
-                    <span class="desc">Autorise l'application a sauvegader votre connexion en memoire (deconseiller).</span>
+                    <span class="desc">Autorise l'application à sauvegarder votre connexion en mémoire
+                        (déconseillé).</span>
                 </div>
                 <div class="group-end">
-                    <button type="submit">Se connecter</button>
-                    <button type="button">S'Inscrire</button>
+                    <button type="submit" class="">Se connecter</button>
+                    <button type="button" class="inscription">S'Inscrire</button>
                 </div>
             </fieldset>
         </form>
         <form action="#" class="sign-in form mask">
             <fieldset>
-                <legend>Cree un compte</legend>
+                <legend>Créer un compte</legend>
 
                 <div class="note">
-                    <p>Créez votre compte en renseignant les informations suivants.</p>
-                    <p class="small">Déjà inscrit ? Cliquez sur "Se connecter".</p>
+                    <p>Créez votre compte en renseignant les informations suivantes.</p>
+                    <!-- <p class="small">Déjà inscrit ? Cliquez sur "Se connecter".</p> -->
                 </div>
-                
+
+                <!-- <div class="doubleGroup"> -->
+                <div class="group">
+                    <label for="sign-nom">Nom</label>
+                    <input type="text" placeholder="" id="sign-nom" name="nom" maxlength="30" required>
+                </div>
+                <div class="group">
+                    <label for="sign-prenom">Prénom</label>
+                    <input type="text" placeholder="" id="sign-prenom" name="prenom" maxlength="30" required>
+                </div>
+                <!-- </div> -->
+
                 <div class="doubleGroup">
+                    <!-- <div class="group">
+                        <label for="i-pays">Indicatif du pays (+237)</label>
+                        <input type="text" placeholder="" id="i-pays" name="i-pays" maxlength="4" required>
+                    </div> -->
                     <div class="group">
-                        <label for="sign-nom">Nom</label>
-                        <input type="text" placeholder="" id="sign-nom" name="nom" maxlength="30" required>
-                    </div>
-                    <div class="group">
-                        <label for="sign-prenom">Prénom</label>
-                        <input type="text" placeholder="" id="sign-prenom" name="prenom" maxlength="30" required>
+                        <label for="sign-phone">Téléphone</label>
+                        <input type="tel" placeholder="" id="sign-phone" name="phone" maxlength="15" required>
                     </div>
                 </div>
 
-                <div class="group">
-                    <label for="sign-phone">Téléphone</label>
-                    <input type="tel" placeholder="" id="sign-phone" name="phone" maxlength="15"
-                        pattern="^\+?[0-9\s\-\(\)]{7,15}$" required>
-                </div>
-                
-                <div class="group">
+                <!-- <div class="group">
                     <label for="sign-email">Email ( facultatif )</label>
                     <input type="email" placeholder="" id="sign-email" name="email" maxlength="100">
-                </div>
+                </div> -->
 
                 <div class="doubleGroup">
                     <div class="group">
                         <label for="sign-userName">Nom d'utilisateur</label>
-                        <input type="email" placeholder="" id="sign-userName" name="userName" maxlength="100" required>
+                        <input type="text" placeholder="" id="sign-userName" name="userName" maxlength="30" required>
                     </div>
 
                     <div class="group">
                         <label for="sign-password">Mot de passe</label>
-                        <input type="password" placeholder="" id="sign-password" name="password" minlength="3" required>
+                        <input type="password" placeholder="" id="sign-password" name="user_password" minlength="3"
+                            required>
                     </div>
                 </div>
                 <div class="group-dif">
@@ -93,17 +107,19 @@
                 </div>
 
                 <div class="group-end">
-                    <button type="submit" cl>S'inscrire</button>
-                    <button type="button" class="btn">Se connecter</button>
+                    <button type="submit">S'inscrire</button>
+                    <button type="button" class="btn connecter">Se connecter</button>
                 </div>
             </fieldset>
-            
+
         </form>
     </div>
+    <footer>
+        <!-- <div class="card-footer"> -->
+        <span class="small"><a href="#">Conditions d’utilisation</a></span>
+        <span class="small"><a href="#">Politique de confidentialité</a></span>
+        <!-- </div> -->
+    </footer>
 </body>
 
 </html>
-
-
-
-

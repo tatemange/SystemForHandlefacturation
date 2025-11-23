@@ -3,11 +3,13 @@ Vue + AJAX: clients.html
 --------------------------- -->
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Gestion des Clients</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
+
 <body>
     <h2>Liste des clients</h2>
 
@@ -36,8 +38,8 @@ Vue + AJAX: clients.html
 
     <script src="../js/jquery.min.js"></script>
     <script>
-        function loadClients(){
-            $.getJSON('../php/controllers/ClientController.php?action=liste', function(data){
+        function loadClients() {
+            $.getJSON('../php/controllers/ClientController.php?action=liste', function (data) {
                 let tbody = '';
                 data.forEach(client => {
                     tbody += `<tr>
@@ -55,28 +57,29 @@ Vue + AJAX: clients.html
             });
         }
 
-        function deleteClient(id){
-            $.post('../php/controllers/ClientController.php?action=supprimer', {id: id}, function(res){
-                if(res.success){ loadClients(); }
+        function deleteClient(id) {
+            $.post('../php/controllers/ClientController.php?action=supprimer', { id: id }, function (res) {
+                if (res.success) { loadClients(); }
                 else { alert('Erreur lors de la suppression'); }
             }, 'json');
         }
 
-        $('#addClientForm').submit(function(e){
+        $('#addClientForm').submit(function (e) {
             e.preventDefault();
-            $.post('../php/controllers/ClientController.php?action=ajouter', $(this).serialize(), function(res){
-                if(res.success){
+            $.post('../php/controllers/ClientController.php?action=ajouter', $(this).serialize(), function (res) {
+                if (res.success) {
                     loadClients();
                     $('#addClientForm')[0].reset();
                 } else {
-                    alert('Erreur lors de l'ajout');
+                    alert("Erreur lors de l'ajout");
                 }
             }, 'json');
         });
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             loadClients();
         });
     </script>
 </body>
+
 </html>

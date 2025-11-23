@@ -1,5 +1,3 @@
-
-
 @font-face {
   font-family: f;
   src: url(../fonts/ProductSans-Regular.ttf);
@@ -15,6 +13,8 @@
 
   /* Thèmes (base = sombre) */
   --background: #000000;
+  --btn-bg: white;
+  --btn-color: black;
   --body-bg: rgba(0, 0, 0, 0.9);
   --label: #ffffff;
   --background-light: rgba(255, 255, 255, 0.05);
@@ -34,12 +34,12 @@
 
   /* Typographie */
   --font-main: f, 'SF Pro rounded', system-ui, sans-serif;
-  --label-second: #A4A4A4;
+  --label-second: #9b9b9b;
   --label-tertiary: #bbbbbb;
   --font-size-small: 0.875rem;
   --font-size-base: 1rem;
   --font-size-large: 1.25rem;
-  --font-title: clamp(1rem, 3.5vw, 3rem);
+  --font-title: clamp(1.5rem, 3vw, 3rem);
 
   /* Ombres & effets */
   --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -79,6 +79,7 @@
     /* Base = clair */
     --background: #ffffff;
     --body-bg: rgba(255, 255, 255, 0.9);
+
     --label: #252525;
     --background-light: rgba(0, 0, 0, 0.1);
     --background-dark: rgba(0, 0, 0, 0.15);
@@ -98,6 +99,8 @@
     --border-reverse: 1px solid var(--border-color-reverse);
     --shadow-light-reverse: 0 2px 8px rgba(0, 0, 0, 0.2);
     --shadow-strong-reverse: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --btn-bg: black;
+    --btn-color: white;
   }
 }
 
@@ -115,4 +118,3 @@ body {
   background-color: var(--background);
   color: var(--label);
 }
-

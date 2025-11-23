@@ -13,13 +13,14 @@ class Database
     public function __construct()
     {
         $this->connectDB();
+        // echo "connexion reussi";
     }
 
     public function connectDB()
     {
         $this->conn = mysqli_connect($this->host, $this->username, $this->password, $this->dbname);
         if (!$this->conn) {
-            die("Erreur de connexion MySQLi: " . mysqli_connect_error());
+            die("Erreur de connexion a facturation (mysqli error): " . mysqli_connect_error());
         }
         mysqli_set_charset($this->conn, "utf8");
     }

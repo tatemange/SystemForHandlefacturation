@@ -7,3 +7,15 @@ lastBtn.forEach((btn) => {
         allForms.forEach(form => form.classList.toggle("mask"))
     })
 })
+
+
+/**
+ * 
+ * @param {HTMLElement} input 
+ */
+function handleInput(input) {
+    const length = input.getAttribute("max")
+
+}
+
+

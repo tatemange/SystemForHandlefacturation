@@ -1,11 +1,11 @@
-
-
 body {
   display: grid;
   place-items: center;
   min-height: 100vh;
 }
 
+
+/* 
 body::before {
   content: "";
   width: 100vw;
@@ -16,7 +16,8 @@ body::before {
   z-index: -1;
   position: absolute;
   aspect-ratio: 1;
-}
+} */
+
 
 .conteneur {
   display: flex;
@@ -24,9 +25,20 @@ body::before {
   align-items: center;
   background-color: var(--body-bg);
   width: 100vw;
-  min-height: 100vh;
   backdrop-filter: blur(50px) saturate(300%);
   padding: 1rem;
 }
 
+footer {
+  width: auto;
+  min-height: 3rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
 
+}
+
+footer a {
+  opacity: .6;
+}
