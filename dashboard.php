@@ -46,7 +46,6 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
     <title>Dashboard - MobileMoney Facturation</title>
     
     <!-- Tes fichiers CSS -->
-    <link rel="stylesheet" href="./assets/css/dashbord.css">
     <link rel="stylesheet" href="./assets/css/dashboard.css">
     
 </head>
@@ -205,8 +204,8 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
                                             </span>
                                         </td>
                                         <td>
-                                            <button class="btn-small view" title="Voir"><i class="fa fa-eye"></i></button>
-                                            <button class="btn-small print" title="Imprimer"><i class="fa fa-print"></i></button>
+                                            <button class="btn-small view" title="Voir">Voir</button>
+                                            <button class="btn-small print" title="Imprimer">Imprimer</button>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
