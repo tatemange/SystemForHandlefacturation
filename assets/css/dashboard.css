@@ -274,6 +274,7 @@ body {
     margin-left: 240px;
     padding: var(--space-xl);
     max-width: 1440px;
+    width: 100%;    
 }
 
 /* ========================================

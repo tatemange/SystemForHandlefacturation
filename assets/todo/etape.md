@@ -4,20 +4,20 @@
 
 ### **Phase 1 — Finalisation de la base de données**
 
-1. [ ] Créer la base MySQL dans phpMyAdmin / Workbench
-2. [ ] Importer le script SQL corrigé
-3. [ ] Tester l’intégrité des clés étrangères (FK)
-4. [ ] Ajouter 3–5 clients de test
-5. [ ] Ajouter 5–10 produits/services de test
+1. [x] Créer la base MySQL dans phpMyAdmin
+2. [x] Importer le script SQL 
+3. [x] Tester l’intégrité des clés étrangères (FK)
+4. [x] Ajouter 3–5 clients de test
+5. [x] Ajouter 5–10 produits/services de test
 
 ---
 
 ### **Phase 2 — Définition de l’architecture de l’application**
 
-6. [ ] Choisir la technologie backend (PHP/Laravel, Node, Python/Django…)
-7. [ ] Choisir le framework frontend (Bootstrap / React / Vue / ou simple HTML CSS JS)
-8. [ ] Créer un projet Git + repo GitHub pour versionner le code
-9. [ ] Définir l’organisation des dossiers (MVC, routing, assets, config)
+6. [x] Choisir la technologie backend (PHP)
+7. [x] Choisir le framework frontend (simple HTML CSS JS)
+8. [x] Créer un projet Git + repo GitHub pour versionner le code
+9. [x] Définir l’organisation des dossiers (MVC)
 
 ---
 

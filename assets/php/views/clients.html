@@ -1,0 +1,144 @@
+<!-- Lien CSS spécifique (si non inclus dans dashboard.php) -->
+<link rel="stylesheet" href="assets/css/form.css">
+
+<div class="main-container">
+
+    <!-- 1. TABLEAU DES CLIENTS -->
+    <h2>Liste des clients</h2>
+    <div class="table-wrapper">
+        <table class="table" id="clientsTable">
+            <thead>
+                <tr>
+                    <th>Nom & Prénom</th>
+                    <th>Téléphone</th>
+                    <th>Email</th>
+                    <th>Solde</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rempli par JS -->
+                <tr><td colspan="5">Chargement...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <br><hr><br>
+
+    <!-- 2. FORMULAIRE D'AJOUT (VOTRE STRUCTURE) -->
+    <form id="addClientForm" class="sign-in form">
+        <fieldset>
+            <legend>Ajouter un client</legend>
+
+            <div class="note">
+                <p>Veuillez renseigner les informations correctes sur le client à enregistrer.</p>
+            </div>
+
+            <!-- Ligne 1 : Nom et Prénom -->
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <div class="group" style="flex: 1;">
+                    <label for="nom-cl">Nom <span style="color:red">*</span></label>
+                    <input type="text" id="nom-cl" name="nom" maxlength="30" required placeholder="">
+                </div>
+                <div class="group" style="flex: 1;">
+                    <label for="prenom-cl">Prénom</label>
+                    <input type="text" id="prenom-cl" name="prenom" maxlength="30" placeholder="">
+                </div>
+            </div>
+
+            <!-- Ligne 2 : Téléphone et Email -->
+            <div class="group">
+                <label for="phone-cl">Téléphone</label>
+                <input type="tel" id="phone-cl" name="telephone" maxlength="15" placeholder="">
+            </div>
+
+            <div class="group">
+                <label for="email-cl">Email</label>
+                <input type="email" id="email-cl" name="email" placeholder="">
+            </div>
+
+            <!-- Boutons -->
+            <div class="group-end">
+                <button type="submit" class="btn-primary">Ajouter le client</button>
+                <button type="reset" class="btn">Annuler</button>
+            </div>
+        </fieldset>
+    </form>
+
+</div>
+
+<!-- 3. JAVASCRIPT NATIF (SANS JQUERY) -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // --- FONCTION : Charger les clients ---
+    async function loadClients() {
+        const tbody = document.querySelector('#clientsTable tbody');
+        
+        try {
+            // On appelle l'API que nous avons créée ensemble
+            const response = await fetch('assets/api/client_api.php'); 
+            const result = await response.json();
+
+            tbody.innerHTML = ''; // Vider le tableau
+
+            if(result.status === 'success' && result.data.length > 0) {
+                result.data.forEach(client => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${client.nom}</strong> ${client.prenom || ''}</td>
+                            <td>${client.numero_telephone || '-'}</td>
+                            <td>${client.email || '-'}</td>
+                            <td>${parseFloat(client.solde).toLocaleString()} FCFA</td>
+                            <td>
+                                <button class="btn-sm" onclick="alert('Modification à venir')">Modifier</button>
+                            </td>
+                        </tr>`;
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">Aucun client trouvé.</td></tr>';
+            }
+        } catch (error) {
+            console.error(error);
+            tbody.innerHTML = '<tr><td colspan="5" style="color:red">Erreur de connexion serveur.</td></tr>';
+        }
+    }
+
+    // --- EVENT : Soumission du formulaire ---
+    document.getElementById('addClientForm').addEventListener('submit', async function(e) {
+        e.preventDefault(); // Empêche le rechargement de page
+
+        // Récupération des données
+        const formData = {
+            nom: document.getElementById('nom-cl').value,
+            prenom: document.getElementById('prenom-cl').value,
+            telephone: document.getElementById('phone-cl').value,
+            email: document.getElementById('email-cl').value
+        };
+
+        try {
+            const response = await fetch('assets/api/client_api.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                alert('Client ajouté avec succès !');
+                this.reset(); // Vider le formulaire
+                loadClients(); // Rafraîchir le tableau
+            } else {
+                alert('Erreur : ' + result.message);
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Erreur technique lors de l'envoi.");
+        }
+    });
+
+    // --- INITIALISATION ---
+    loadClients();
+});
+</script>
