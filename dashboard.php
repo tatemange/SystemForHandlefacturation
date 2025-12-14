@@ -46,8 +46,13 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - MobileMoney Facturation</title>
 
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- Tes fichiers CSS -->
     <link rel="stylesheet" href="./assets/css/dashboard.css">
+    <link rel="stylesheet" href="./assets/css/form.css">
+    <link rel="stylesheet" href="./assets/css/documents.css">
 
 </head>
 
@@ -123,6 +128,15 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
         switch ($page) {
 
             // CAS 1 : GESTION DES CLIENTS
+            case 'documents':
+                $fichier = 'assets/php/views/documents.html';
+                if (file_exists($fichier)) {
+                    include $fichier;
+                } else {
+                    echo "<h3 style='color:red'>Erreur : Le fichier $fichier est introuvable.</h3>";
+                }
+                break;
+
             case 'clients':
                 // Attention : Vérifiez si votre fichier s'appelle 'client.html' ou 'clients.html'
                 // D'après votre arborescence, c'était 'client.html' (singulier)
@@ -166,22 +180,110 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
             <!-- --- DÉBUT DU CONTENU DU DASHBOARD (HOME) --- -->
             <h1>Tableau de bord</h1>
 
-            <div class="cards-container">
+            <!-- Stats Cards Grid -->
+            <div class="stats-grid">
+                <!-- Card 1: Clients -->
                 <div class="card">
-                    <h3>Clients</h3>
-                    <p class="number">0</p>
+                    <div class="stat-card">
+                        <div class="stat-icon client-color">
+                            <i class="fa fa-users"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Clients</h3>
+                            <p class="number"><?php echo $nbClients; ?></p>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Card 2: Chiffre d'affaires -->
                 <div class="card">
-                    <h3>Chiffre d'affaires</h3>
-                    <p class="number">0 FCFA</p>
+                    <div class="stat-card">
+                        <div class="stat-icon money-color">
+                            <i class="fa fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Chiffre d'affaires</h3>
+                            <p class="number"><?php echo number_format($caTotal, 0, ',', ' '); ?> FCFA</p>
+                        </div>
+                    </div>
                 </div>
-                <!-- Ajoutez vos autres cartes ici -->
+
+                <!-- Card 3: Factures en attente -->
+                <div class="card">
+                    <div class="stat-card">
+                        <div class="stat-icon invoice-color">
+                            <i class="fa fa-file-invoice"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Factures en attente</h3>
+                            <p class="number"><?php echo $nbFacturesAttente; ?></p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+            <!-- Recent Transactions -->
+            <div class="recent-transactions">
+                <div class="section-header">
+                    <h2>Dernières factures</h2>
+                    <a href="dashboard.php?page=documents" class="view-all">Voir tout</a>
+                </div>
 
-            <div class="recent-orders">
-                <h2>Dernières activités</h2>
-                <p>Aucune activité pour le moment.</p>
+                <?php if (mysqli_num_rows($resLastDocs) > 0): ?>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>N° Facture</th>
+                                    <th>Client</th>
+                                    <th>Date</th>
+                                    <th>Montant</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php while ($doc = mysqli_fetch_assoc($resLastDocs)): ?>
+                                <tr>
+                                    <td><strong><?php echo htmlspecialchars($doc['numero_d']); ?></strong></td>
+                                    <td><?php echo htmlspecialchars($doc['nom'] . ' ' . $doc['prenom']); ?></td>
+                                    <td><?php echo date('d/m/Y', strtotime($doc['date_creation'])); ?></td>
+                                    <td><?php echo number_format($doc['montant_total'], 0, ',', ' '); ?> FCFA</td>
+                                    <td>
+                                        <?php
+                                        $statusClass = strtolower($doc['status']);
+                                        $statusLabel = $doc['status'];
+                                        if ($doc['status'] === 'PAYE') {
+                                            $statusClass = 'payee';
+                                            $statusLabel = 'Payée';
+                                        } elseif ($doc['status'] === 'EN_COURS') {
+                                            $statusClass = 'en_attente';
+                                            $statusLabel = 'En cours';
+                                        } elseif ($doc['status'] === 'IMPAYE') {
+                                            $statusClass = 'annulee';
+                                            $statusLabel = 'Impayée';
+                                        }
+                                        ?>
+                                        <span class="status-badge <?php echo $statusClass; ?>">
+                                            <?php echo $statusLabel; ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn-small view" onclick="alert('Voir facture')">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                        <button class="btn-small print" onclick="alert('Imprimer')">
+                                            <i class="fa fa-print"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <?php endwhile; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <p style="text-align: center; color: var(--label-second); padding: 2rem;">Aucune facture pour le moment.</p>
+                <?php endif; ?>
             </div>
             <!-- --- FIN DU CONTENU DU DASHBOARD --- -->
 
@@ -198,6 +300,7 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
 
     <!-- Script JS pour les interactions si nécessaire -->
     <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/documents.js"></script>
 </body>
 
 </html>

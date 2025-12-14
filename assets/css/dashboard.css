@@ -481,15 +481,18 @@ thead {
 }
 
 thead th {
-    padding: 10px var(--space-md);
+    background: var(--background-light);
+    padding: 8px 16px;
     text-align: left;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    color: var(--label);
 }
 
 tbody tr {
+    height: 26px;
     border-bottom: 1px solid var(--separator);
     transition: var(--transition-fast);
 }
@@ -505,9 +508,14 @@ tbody tr:hover {
 }
 
 tbody td {
-    padding: 12px var(--space-md);
-    font-size: 14px;
+    padding: 0 16px;
+    height: 26px;
+    font-size: 13px;
+    vertical-align: middle;
     color: var(--label-second);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* ========================================
@@ -662,5 +670,241 @@ tbody td {
         width: 40px;
         height: 40px;
         font-size: 18px;
+    }
+}
+/* ========================================
+   TOAST NOTIFICATIONS
+   ======================================== */
+#notification-area {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    background: var(--background-light);
+    color: var(--text-primary);
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    min-width: 300px;
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideIn 0.3s forwards, fadeOut 0.5s 4s forwards;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.toast.success {
+    border-left: 4px solid var(--success);
+}
+
+.toast.error {
+    border-left: 4px solid var(--danger);
+}
+
+.toast-icon {
+    margin-right: 12px;
+    font-size: 18px;
+}
+
+.toast.success .toast-icon { color: var(--success); }
+.toast.error .toast-icon { color: var(--danger); }
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+/* ========================================
+   DOCUMENTS / INVOICES STYLING
+   ======================================== */
+
+/* Section Header */
+.section-headers {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+}
+
+.section-headers .title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--label);
+}
+
+/* Invoice Form Container */
+.form-container {
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Items Table (Inside Invoice Form) - Let form.css handle styling */
+#itemsTable {
+    margin-top: var(--space-md);
+}
+
+#itemsTable .item-total {
+    font-weight: 600;
+    color: var(--label);
+    font-size: 14px;
+}
+
+/* Total Display */
+#displayTotal {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--first-color);
+    background: linear-gradient(135deg, var(--first-color), var(--apple-blue-hover));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.payee {
+    background: rgba(52, 199, 89, 0.15);
+    color: var(--success);
+    border: 1px solid rgba(52, 199, 89, 0.3);
+}
+
+.status-badge.en_attente {
+    background: rgba(255, 159, 10, 0.15);
+    color: #FF9F0A;
+    border: 1px solid rgba(255, 159, 10, 0.3);
+}
+
+.status-badge.annulee,
+.status-badge.impaye {
+    background: rgba(255, 69, 58, 0.15);
+    color: var(--danger);
+    border: 1px solid rgba(255, 69, 58, 0.3);
+}
+
+/* Documents Table Specific Styling */
+#documentsTable tbody tr {
+    transition: all 0.2s ease;
+}
+
+#documentsTable tbody tr:hover {
+    background: var(--sidebar-hover);
+    transform: translateX(2px);
+}
+
+#documentsTable tbody td strong {
+    color: var(--first-color);
+    font-weight: 600;
+}
+
+/* Add Line Button (Inside Form) */
+.table-wrapper + div {
+    margin-top: var(--space-sm);
+}
+
+/* Small Action Buttons */
+.btn-small {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+    background: var(--white);
+    color: var(--black);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-small:hover {
+    background: var(--first-color);
+    color: white;
+    border-color: var(--first-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(62, 104, 255, 0.25);
+}
+
+.btn-small.view {
+    background: rgba(0, 122, 255, 0.1);
+    border-color: rgba(0, 122, 255, 0.3);
+    color: var(--first-color);
+}
+
+.btn-small.print {
+    background: rgba(52, 199, 89, 0.1);
+    border-color: rgba(52, 199, 89, 0.3);
+    color: var(--success);
+}
+
+.btn-small.view:hover {
+    background: var(--first-color);
+    color: white;
+}
+
+.btn-small.print:hover {
+    background: var(--success);
+    color: white;
+}
+
+/* Responsive Adjustments for Documents */
+@media (max-width: 768px) {
+    .section-headers {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-md);
+    }
+
+    #itemsTable {
+        font-size: 12px;
+    }
+
+    #itemsTable thead th,
+    #itemsTable tbody td {
+        padding: 6px 8px;
+    }
+
+    #displayTotal {
+        font-size: 22px;
     }
 }

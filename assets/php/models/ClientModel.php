@@ -4,36 +4,40 @@
 require_once __DIR__ . '/../config/Database.php';
 
 class ClientModel {
-    private $pdo;
+    private $db;
+    private $conn;
 
     public function __construct() {
-        // On récupère l'instance de connexion
-        $this->pdo = Database::getInstance();
+        // On instancie la classe Database
+        $this->db = new Database();
+        $this->conn = $this->db->conn;
     }
 
     // Récupérer tous les clients
     public function getAllClients() {
-        try {
-            $stmt = $this->pdo->query("SELECT * FROM CLIENT ORDER BY id DESC");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            return []; // Retourne un tableau vide en cas d'erreur
+        $sql = "SELECT * FROM CLIENT ORDER BY id DESC";
+        $result = mysqli_query($this->conn, $sql);
+        
+        if ($result) {
+            return mysqli_fetch_all($result, MYSQLI_ASSOC);
+        } else {
+            return [];
         }
     }
 
     // Ajouter un client
     public function addClient($nom, $prenom, $tel, $email) {
-        try {
-            $sql = "INSERT INTO CLIENT (nom, prenom, numero_telephone, email, solde, dette) 
-                    VALUES (:nom, :prenom, :tel, :email, 0, 0)";
-            $stmt = $this->pdo->prepare($sql);
-            return $stmt->execute([
-                ':nom' => $nom,
-                ':prenom' => $prenom,
-                ':tel' => $tel,
-                ':email' => $email
-            ]);
-        } catch (PDOException $e) {
+        $sql = "INSERT INTO CLIENT (nom, prenom, numero_telephone, email, solde, dette) 
+                VALUES (?, ?, ?, ?, 0, 0)";
+        
+        $stmt = mysqli_prepare($this->conn, $sql);
+        
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, "ssss", $nom, $prenom, $tel, $email);
+            $exec = mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+            return $exec;
+        } else {
             return false;
         }
     }

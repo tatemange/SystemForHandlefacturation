@@ -1,40 +1,55 @@
 
-
 <?php 
+require_once __DIR__ . '/../config/Database.php';
 
 class DetailDocumentModel {
+    private $db;
     private $conn;
     private $table = "DETAIL_DOCUMENT";
 
-    public function __construct($conn){ $this->conn = $conn; }
+    public function __construct($db = null) {
+        if ($db && $db instanceof Database) {
+            $this->db = $db;
+        } else {
+            $this->db = new Database();
+        }
+        $this->conn = $this->db->conn;
+    }
 
-    public function getAll(){
-        $sql = "SELECT * FROM $this->table WHERE is_deleted=0";
-        $result = mysqli_query($this->conn, $sql);
+    // Récupérer les détails d'un document
+    public function getByDocumentId($id_document){
+        $sql = "SELECT d.*, s.libelle 
+                FROM $this->table d
+                JOIN SERVICE_PRODUIT s ON d.id_service_produit = s.id
+                WHERE d.id_document = ?";
+        
+        $stmt = mysqli_prepare($this->conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $id_document);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
-    public function getById($id){
-        $stmt = mysqli_prepare($this->conn, "SELECT * FROM $this->table WHERE id_detail=? AND is_deleted=0");
-        mysqli_stmt_bind_param($stmt, 'i', $id);
-        mysqli_stmt_execute($stmt);
-        return mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+    // Créer une ligne de détail
+    public function create($id_document, $id_service_produit, $quantite, $prix_unitaire, $montant, $status = 'EN_ATTENTE'){
+        // id_detail est auto-incrémenté
+        $sql = "INSERT INTO $this->table (id_document, id_service_produit, quantite, prix_unitaire, montant, status) 
+                VALUES (?, ?, ?, ?, ?, ?)";
+        
+        $stmt = mysqli_prepare($this->conn, $sql);
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, 'iiidds', $id_document, $id_service_produit, $quantite, $prix_unitaire, $montant, $status);
+            $exec = mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+            return $exec;
+        }
+        return false;
     }
 
-    public function create($id_document, $id_service_produit, $quantite, $prix_unitaire, $montant){
-        $stmt = mysqli_prepare($this->conn, "INSERT INTO $this->table (id_document, id_service_produit, quantite, prix_unitaire, montant, is_deleted) VALUES (?, ?, ?, ?, ?, 0)");
-        mysqli_stmt_bind_param($stmt, 'iiidd', $id_document, $id_service_produit, $quantite, $prix_unitaire, $montant);
-        return mysqli_stmt_execute($stmt);
-    }
-
-    public function update($id, $id_document, $id_service_produit, $quantite, $prix_unitaire, $montant){
-        $stmt = mysqli_prepare($this->conn, "UPDATE $this->table SET id_document=?, id_service_produit=?, quantite=?, prix_unitaire=?, montant=? WHERE id_detail=?");
-        mysqli_stmt_bind_param($stmt, 'iiiddi', $id_document, $id_service_produit, $quantite, $prix_unitaire, $montant, $id);
-        return mysqli_stmt_execute($stmt);
-    }
-
+    // Supprimer une ligne
     public function delete($id){
-        $stmt = mysqli_prepare($this->conn, "UPDATE $this->table SET is_deleted=1 WHERE id_detail=?");
+        $sql = "DELETE FROM $this->table WHERE id_detail=?";
+        $stmt = mysqli_prepare($this->conn, $sql);
         mysqli_stmt_bind_param($stmt, 'i', $id);
         return mysqli_stmt_execute($stmt);
     }
