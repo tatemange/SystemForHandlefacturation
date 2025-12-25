@@ -1,19 +1,12 @@
-
 <?php 
 require_once __DIR__ . '/../config/Database.php';
 
 class DetailDocumentModel {
-    private $db;
     private $conn;
     private $table = "DETAIL_DOCUMENT";
 
-    public function __construct($db = null) {
-        if ($db && $db instanceof Database) {
-            $this->db = $db;
-        } else {
-            $this->db = new Database();
-        }
-        $this->conn = $this->db->conn;
+    public function __construct($conn) {
+        $this->conn = $conn;
     }
 
     // Récupérer les détails d'un document
@@ -31,14 +24,15 @@ class DetailDocumentModel {
     }
 
     // Créer une ligne de détail
-    public function create($id_document, $id_service_produit, $quantite, $prix_unitaire, $montant, $status = 'EN_ATTENTE'){
+    public function create($id_document, $id_service_produit, $quantite, $prix_unitaire, $montant){
         // id_detail est auto-incrémenté
-        $sql = "INSERT INTO $this->table (id_document, id_service_produit, quantite, prix_unitaire, montant, status) 
-                VALUES (?, ?, ?, ?, ?, ?)";
+        // Note: La colonne 'status' n'existe pas dans DETAIL_DOCUMENT, on l'a retirée
+        $sql = "INSERT INTO $this->table (id_document, id_service_produit, quantite, prix_unitaire, montant) 
+                VALUES (?, ?, ?, ?, ?)";
         
         $stmt = mysqli_prepare($this->conn, $sql);
         if ($stmt) {
-            mysqli_stmt_bind_param($stmt, 'iiidds', $id_document, $id_service_produit, $quantite, $prix_unitaire, $montant, $status);
+            mysqli_stmt_bind_param($stmt, 'iiidd', $id_document, $id_service_produit, $quantite, $prix_unitaire, $montant);
             $exec = mysqli_stmt_execute($stmt);
             mysqli_stmt_close($stmt);
             return $exec;

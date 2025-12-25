@@ -5,7 +5,7 @@
 
 :root {
   /* Couleurs principales */
-  --first-color: orange;
+  --first-color: rgb(0, 100, 231);
   --first-text-color: #3367d1;
   --second-color: #e94343;
   --accent-color: #4cdb94;

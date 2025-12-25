@@ -1,33 +1,46 @@
 <?php
-// On inclut la connexion à la base de données
-// Assurez-vous que Database.php existe bien dans assets/php/config/
-require_once __DIR__ . '/../config/Database.php';
+// assets/php/models/ClientModel.php
 
 class ClientModel {
-    private $db;
     private $conn;
+    private $table = "CLIENT";
 
-    public function __construct() {
-        // On instancie la classe Database
-        $this->db = new Database();
-        $this->conn = $this->db->conn;
+    public function __construct($conn) {
+        $this->conn = $conn;
     }
 
-    // Récupérer tous les clients
-    public function getAllClients() {
-        $sql = "SELECT * FROM CLIENT ORDER BY id DESC";
+    public function getAll() {
+        $sql = "SELECT * FROM $this->table ORDER BY nom ASC";
         $result = mysqli_query($this->conn, $sql);
-        
-        if ($result) {
-            return mysqli_fetch_all($result, MYSQLI_ASSOC);
-        } else {
-            return [];
-        }
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    
+    // Alias pour compatibilité si besoin, mais on préfère getAll()
+    public function getAllClients() {
+        return $this->getAll();
     }
 
-    // Ajouter un client
+    public function getById($id) {
+        $sql = "SELECT * FROM $this->table WHERE id = ?";
+        $stmt = mysqli_prepare($this->conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $id);
+        mysqli_stmt_execute($stmt);
+        return mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+    }
+
+    public function updateSoldeDette($id, $solde, $dette) {
+        $sql = "UPDATE $this->table SET solde = ?, dette = ? WHERE id = ?";
+        $stmt = mysqli_prepare($this->conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'ddi', $solde, $dette, $id);
+        return mysqli_stmt_execute($stmt);
+    }
+
+    // Méthode restaurée pour compatibilité avec client_api.php
     public function addClient($nom, $prenom, $tel, $email) {
-        $sql = "INSERT INTO CLIENT (nom, prenom, numero_telephone, email, solde, dette) 
+        // Validation basique
+        if(empty($nom)) return false;
+
+        $sql = "INSERT INTO $this->table (nom, prenom, numero_telephone, email, solde, dette) 
                 VALUES (?, ?, ?, ?, 0, 0)";
         
         $stmt = mysqli_prepare($this->conn, $sql);
@@ -42,4 +55,3 @@ class ClientModel {
         }
     }
 }
-?>

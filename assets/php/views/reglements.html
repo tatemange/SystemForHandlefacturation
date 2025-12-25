@@ -1,0 +1,128 @@
+<div class="documents-header">
+    <div class="header-content">
+        <h1><i class="fa fa-money-bill-wave"></i> Gestion Caisse</h1>
+        <p>Encaissements et Validation des règlements</p>
+    </div>
+    <div class="header-actions">
+        <!-- Selecteur de caisse -->
+        <select id="select-caisse-actif" class="form-control" style="width:auto; display:inline-block;">
+            <option value="">Chargement caisses...</option>
+        </select>
+        <button class="btn btn-primary" onclick="actualiserCaisse()">
+            <i class="fa fa-sync"></i> Actualiser
+        </button>
+    </div>
+</div>
+
+<!-- Stats Rapides de la Caisse Sélectionnée -->
+<div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2rem;">
+    <div class="card">
+        <div class="stat-card">
+            <div class="stat-icon money-color"><i class="fa fa-wallet"></i></div>
+            <div class="stat-details">
+                <h3>Total Encaissements</h3>
+                <p class="number" id="lbl-total-caisse">0 FCFA</p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="stat-card">
+            <div class="stat-icon invoice-color"><i class="fa fa-check-circle"></i></div>
+            <div class="stat-details">
+                <h3>Règlements Validés</h3>
+                <p class="number" id="lbl-nb-valides">0</p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="stat-card">
+            <div class="stat-icon client-color"><i class="fa fa-clock"></i></div>
+            <div class="stat-details">
+                <h3>En Attente</h3>
+                <p class="number" id="lbl-nb-attente">0</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row-layout">
+    <!-- COL 1: Formulaire -->
+    <div class="card card-form">
+        <div class="card-header">
+            <h3><i class="fa fa-plus-circle"></i> Nouveau Règlement</h3>
+        </div>
+        <div class="card-body">
+            <form id="form-reglement">
+                <div class="form-group">
+                    <label>Client <span class="required">*</span></label>
+                    <select id="reg-client" class="form-control" required onchange="chargerFacturesClient(this.value)">
+                        <option value="">Sélectionner un client</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Lier à une facture (Optionnel)</label>
+                    <select id="reg-document" class="form-control">
+                        <option value="">Aucune (Acompte / Solde global)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Montant (FCFA) <span class="required">*</span></label>
+                    <input type="number" id="reg-montant" class="form-control" required min="1" placeholder="Ex: 5000">
+                </div>
+
+                <div class="form-group">
+                    <label>Mode de Paiement</label>
+                    <select id="reg-mode" class="form-control">
+                        <option value="CASH">Espèces (CASH)</option>
+                        <option value="MOBILE_MONEY">Mobile Money</option>
+                        <option value="CHEQUE">Chèque</option>
+                        <option value="BANK_TRANSFER">Virement Bancaire</option>
+                        <option value="AUTRE">Autre</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Référence / Note</label>
+                    <input type="text" id="reg-ref" class="form-control" placeholder="Ex: N° Transaction Mobile Money">
+                </div>
+
+                <button type="submit" class="btn btn-success full-width">
+                    <i class="fa fa-save"></i> Enregistrer Paiement
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- COL 2: Liste des Règlements -->
+    <div class="card card-list">
+        <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+            <h3>Journal de Caisse</h3>
+            <div class="filter-group">
+                <button class="btn-small active" onclick="filtrerReglements('tous', this)">Tous</button>
+                <button class="btn-small" onclick="filtrerReglements('EN_ATTENTE', this)">En Attente</button>
+                <button class="btn-small" onclick="filtrerReglements('VALIDE', this)">Validés</button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Client</th>
+                            <th>Montant</th>
+                            <th>Mode</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-reglements">
+                        <tr><td colspan="6" class="text-center">Chargement...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -10,39 +10,24 @@ class HistoriqueModel
         $this->conn = $conn;
     }
 
-    public function getAll()
+    public function create($type_action, $commentaire, $solde, $id_reglement = null)
     {
-        $sql = "SELECT * FROM $this->table WHERE is_deleted=0";
+        $sql = "INSERT INTO $this->table (type_action, commentaire, solde, id_reglement, date_action) VALUES (?, ?, ?, ?, NOW())";
+        $stmt = mysqli_prepare($this->conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'ssdi', $type_action, $commentaire, $solde, $id_reglement);
+        return mysqli_stmt_execute($stmt);
+    }
+
+    public function getByClient($id_client) {
+        // Cette méthode nécessiterait une jointure complexe si on veut filtrer par client via Reglement
+        // Pour l'instant, on liste tout ou on filtre par Reglement si besoin
+        // TODO: Implémenter si requis par l'UI
+        return [];
+    }
+    
+    public function getAll() {
+        $sql = "SELECT * FROM $this->table ORDER BY date_action DESC";
         $result = mysqli_query($this->conn, $sql);
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
-    }
-
-    public function getById($id)
-    {
-        $stmt = mysqli_prepare($this->conn, "SELECT * FROM $this->table WHERE id_historique=? AND is_deleted=0");
-        mysqli_stmt_bind_param($stmt, 'i', $id);
-        mysqli_stmt_execute($stmt);
-        return mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
-    }
-
-    public function create($status, $commentaire, $solde, $date)
-    {
-        $stmt = mysqli_prepare($this->conn, "INSERT INTO $this->table (status, commentaire, solde, date, is_deleted) VALUES (?, ?, ?, ?, 0)");
-        mysqli_stmt_bind_param($stmt, 'ssds', $status, $commentaire, $solde, $date);
-        return mysqli_stmt_execute($stmt);
-    }
-
-    public function update($id, $status, $commentaire, $solde, $date)
-    {
-        $stmt = mysqli_prepare($this->conn, "UPDATE $this->table SET status=?, commentaire=?, solde=?, date=? WHERE id_historique=?");
-        mysqli_stmt_bind_param($stmt, 'sdssi', $status, $commentaire, $solde, $date, $id);
-        return mysqli_stmt_execute($stmt);
-    }
-
-    public function delete($id)
-    {
-        $stmt = mysqli_prepare($this->conn, "UPDATE $this->table SET is_deleted=1 WHERE id_historique=?");
-        mysqli_stmt_bind_param($stmt, 'i', $id);
-        return mysqli_stmt_execute($stmt);
     }
 }

@@ -1,16 +1,22 @@
 <?php
 session_start();
 header('Content-Type: application/json');
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/api_errors.log');
+error_reporting(E_ALL);
 
 require_once __DIR__ . '/../php/models/DocumentModel.php';
 require_once __DIR__ . '/../php/models/DetailDocumentModel.php';
 require_once __DIR__ . '/../php/config/Database.php';
 
 $db = new Database();
-$docModel = new DocumentModel($db);
-$detailModel = new DetailDocumentModel($db);
+$docModel = new DocumentModel($db->conn);
+$detailModel = new DetailDocumentModel($db->conn);
 
 $method = $_SERVER['REQUEST_METHOD'];
+
+try {
 
 // --- GET: LISTER LES DOCUMENTS ---
 if ($method === 'GET') {
@@ -57,8 +63,11 @@ if ($method === 'POST') {
     $rand = strtoupper(substr(uniqid(), -4));
     $numero_d = $prefix . $rand;
 
+    require_once __DIR__ . '/../php/models/ServiceProduitModel.php';
+    $serviceModel = new ServiceProduitModel($db->conn);
+
     // Transaction manuelle (si supporté par le driver/table Engine InnoDB)
-    mysqli_begin_transaction($docModel->conn);
+    mysqli_begin_transaction($db->conn);
 
     try {
         // 1. Créer l'en-tête
@@ -75,19 +84,36 @@ if ($method === 'POST') {
             $price = floatval($item['price']);
             $montantLigne = $qty * $price;
 
-            $status = isset($item['status']) ? $item['status'] : 'EN_ATTENTE';
-            $resDetail = $detailModel->create($docId, $id_service, $qty, $price, $montantLigne, $status);
+            // --- GESTION STOCK ---
+            // Vérifier
+            if (!$serviceModel->checkStock($id_service, $qty)) {
+                // Récupérer infos produit pour message clair
+                $prod = $serviceModel->getById($id_service);
+                $nomProd = $prod ? $prod['libelle'] : "ID $id_service";
+                $stockDispo = $prod ? $prod['quantite_stock'] : '?';
+                throw new Exception("Stock insuffisant pour '$nomProd'. Demandé: $qty, Dispo: $stockDispo");
+            }
+            // Décrémenter
+            if (!$serviceModel->decrementStock($id_service, $qty)) {
+                throw new Exception("Erreur technique lors de la mise à jour du stock pour ID $id_service");
+            }
+            // ---------------------
+
+            // BUGFIX: "status" n'est pas une colonne de DETAIL_DOCUMENT
+            $resDetail = $detailModel->create($docId, $id_service, $qty, $price, $montantLigne);
             if (!$resDetail) {
                 throw new Exception("Erreur lors de l'ajout de la ligne produit ID: $id_service");
             }
         }
 
-        mysqli_commit($docModel->conn);
+        mysqli_commit($db->conn);
         echo json_encode(['status' => 'success', 'message' => 'Facture créée avec succès', 'id' => $docId, 'numero' => $numero_d]);
 
-    } catch (Exception $e) {
-        mysqli_rollback($docModel->conn);
-        echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+    } catch (Throwable $e) {
+        mysqli_rollback($db->conn);
+        $msg = $e->getMessage();
+        error_log("API Error: $msg"); // Log to server log if possible
+        echo json_encode(['status' => 'error', 'message' => "Erreur Serveur: " . $msg]);
     }
     exit;
 }
@@ -120,4 +146,12 @@ if ($method === 'PUT') {
 }
 
 echo json_encode(['status' => 'error', 'message' => 'Méthode non supportée']);
+
+} catch (Throwable $e) {
+    http_response_code(500);
+    echo json_encode([
+        'status' => 'error', 
+        'message' => 'Exception Globale: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine()
+    ]);
+}
 ?>

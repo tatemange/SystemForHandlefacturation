@@ -169,7 +169,7 @@ function addItemRow() {
     if (produits.length > 0) {
         options += '<optgroup label="Produits">';
         produits.forEach(p => {
-            options += `<option value="${p.id}" data-price="${p.prix_de_vente}">${p.libelle}</option>`;
+            options += `<option value="${p.id}" data-price="${p.prix_de_vente}" data-service="${p.est_service}" data-stock="${p.quantite_stock}">${p.libelle} (Stock: ${p.quantite_stock})</option>`;
         });
         options += '</optgroup>';
     }
@@ -214,8 +214,23 @@ function updateRow(input) {
         priceInput.value = price;
     }
 
-    const price = parseFloat(priceInput.value) || 0;
+    const selectedOption = select.options[select.selectedIndex];
+    const isService = selectedOption.getAttribute('data-service') == '1';
+    const stock = parseInt(selectedOption.getAttribute('data-stock')) || 0;
+
+    // Check Stock validity
     const qty = parseInt(qtyInput.value) || 0;
+    if (!isService && qty > stock && select.value !== "") {
+        qtyInput.style.borderColor = "red";
+        qtyInput.title = `Stock insuffisant (Max: ${stock})`;
+        // Optional: show a small error message nearby
+    } else {
+        qtyInput.style.borderColor = "#ddd"; // Reset to default (or css class)
+        qtyInput.title = "";
+    }
+
+    const price = parseFloat(priceInput.value) || 0;
+    // const qty already defined above
     const total = price * qty;
 
     totalCell.textContent = total.toLocaleString('fr-FR');
@@ -253,15 +268,30 @@ async function handleInvoiceSubmit(e) {
     }
 
     const items = [];
+    let valid = true;
     document.querySelectorAll('#itemsTable tbody tr').forEach(tr => {
         const id = tr.querySelector('.item-select').value;
         const qty = tr.querySelector('.item-qty').value;
         const price = tr.querySelector('.item-price').value;
 
         if (id) {
+            // Re-validate stock before submitting
+            const selectedOption = tr.querySelector('.item-select').selectedOptions[0];
+            const isService = selectedOption.getAttribute('data-service') == '1';
+            const stock = parseInt(selectedOption.getAttribute('data-stock')) || 0;
+            const currentQty = parseInt(qty);
+
+            if (!isService && currentQty > stock) {
+                alert(`Stock insuffisant pour le produit "${selectedOption.text.split('(')[0].trim()}"\nDemandé: ${currentQty}, Dispo: ${stock}`);
+                valid = false;
+                return;
+            }
+
             items.push({ id: id, qty: qty, price: price });
         }
     });
+
+    if (!valid) return;
 
     if (items.length === 0) {
         alert('Veuillez ajouter au moins un article');

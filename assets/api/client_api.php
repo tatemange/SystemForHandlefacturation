@@ -11,8 +11,12 @@ header('Content-Type: application/json');
 
 // --- 2. INCLUSION DU MODÈLE ---
 require_once __DIR__ . '/../php/models/ClientModel.php';
+require_once __DIR__ . '/../php/config/Database.php';
 
-$clientModel = new ClientModel();
+$database = new Database();
+$db = $database->conn;
+$clientModel = new ClientModel($db);
+
 $method = $_SERVER['REQUEST_METHOD'];
 
 // --- 3. TRAITEMENT GET (Récupérer la liste) ---

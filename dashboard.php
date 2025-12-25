@@ -50,9 +50,11 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Tes fichiers CSS -->
+    <link rel="stylesheet" href="./assets/css/variableCSS.css">
     <link rel="stylesheet" href="./assets/css/dashboard.css">
     <link rel="stylesheet" href="./assets/css/form.css">
     <link rel="stylesheet" href="./assets/css/documents.css">
+    <link rel="stylesheet" href="./assets/css/caisse.css">
 
 </head>
 
@@ -157,8 +159,8 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
 
             // CAS 3 : CAISSE
             case 'reglements':
-                // include 'assets/php/views/reglements.html';
-                echo "<h2>Page Caisse (En construction)</h2>";
+                include 'assets/php/views/reglements.html';
+                // echo "<h2>Page Caisse (En construction)</h2>";
                 break;
 
             // CAS 4 : SERVICES
@@ -301,6 +303,7 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
     <!-- Script JS pour les interactions si nécessaire -->
     <script src="./assets/js/main.js"></script>
     <script src="./assets/js/documents.js"></script>
+    <script src="./assets/js/reglements.js"></script>
 </body>
 
 </html>

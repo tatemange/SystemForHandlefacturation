@@ -119,7 +119,8 @@ CREATE TABLE `REGLEMENT` (
   `montant` decimal(14,2) NOT NULL,
   `date_reglement` datetime NOT NULL DEFAULT current_timestamp(),
   `mode_paiement` enum('ESPICES','CASH','MOBILE_MONEY','BANK_TRANSFER','CHEQUE','AUTRE') DEFAULT 'CASH',
-  `reference` varchar(255) DEFAULT NULL
+  `reference` varchar(255) DEFAULT NULL,
+  `id_document` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -133,6 +134,7 @@ CREATE TABLE `SERVICE_PRODUIT` (
   `libelle` varchar(100) NOT NULL,
   `prix_de_vente` decimal(12,2) NOT NULL,
   `prix_achat` decimal(12,2) DEFAULT NULL,
+  `quantite_stock` int(11) DEFAULT NULL,
   `est_service` tinyint(1) NOT NULL DEFAULT 0,
   `description` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

@@ -1,0 +1,198 @@
+/* ========================================
+   CAISSE / REGLEMENTS MODULE STYLES
+   ======================================== */
+
+/* Header Section */
+.documents-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-md);
+    border-bottom: var(--border);
+    flex-wrap: wrap;
+    gap: var(--space-md);
+}
+
+.documents-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--label);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.documents-header p {
+    color: var(--label-second);
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.header-actions {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+}
+
+.header-actions select {
+    border: var(--border);
+  height: 32px;
+  padding: 0 1rem;
+  border-radius: 50px;
+  background-color: transparent;
+  outline: none;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.btn.btn-success {
+    color: var(--btn-color);
+    background-color: var(--btn-bg);    
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.header-actions .btn {
+    border: var(--border);
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+    padding: 0 1rem;
+    height: 32px;
+    font-size: 14px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+/* Row Layout (Form + List) */
+.row-layout {
+    display: flex;
+    gap: var(--space-lg);
+    align-items: flex-start;
+}
+
+.card-form {
+    flex: 1;
+    height: fit-content;
+}
+
+.card-list {
+    flex: 2;
+}
+
+/* Card Improvements */
+.card-header {
+    padding: var(--space-md) var(--space-lg);
+    border-bottom: var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--label);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-body {
+    padding: var(--space-lg);
+}
+
+.card-body.p-0 {
+    padding: 0;
+}
+
+/* Form Specifics inside Card */
+#form-reglement {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+#form-reglement .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--label-second);
+    margin-bottom: 6px;
+}
+
+#form-reglement .form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    border: var(--border);
+    background: var(--background);
+    color: var(--label);
+    font-size: 14px;
+    transition: var(--transition-base);
+}
+
+#form-reglement .form-control:focus {
+    border-color: var(--first-color);
+    box-shadow: 0 0 0 2px rgba(var(--first-color-rgb), 0.2); /* Adjust if needed */
+    outline: none;
+}
+
+.required {
+    color: var(--danger);
+}
+
+/* Filter Group Buttons */
+.filter-group {
+    background: var(--background);
+    padding: 4px;
+    border-radius: 20px;
+    display: flex;
+    gap: 0px;
+    border: var(--border);
+    box-shadow: var(--shadow-xs);
+}
+
+.filter-group button {
+    background: transparent;
+    color: var(--label-second);
+    border: none;
+    padding: 0px 12px;
+    border-radius: 30px;
+    height: 26px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.filter-group button.active,
+.filter-group button:hover {
+    background: var(--btn-bg);
+    color: var(--btn-color);
+    box-shadow: var(--shadow-xs);
+}
+
+.full-width {
+    width: 100%;
+    justify-content: center;
+    margin-top: var(--space-sm);
+    padding: 12px;
+}
+
+@media (max-width: 900px) {
+    .row-layout {
+        flex-direction: column;
+    }
+    
+    .card {
+        width: 100%;
+    }
+}
