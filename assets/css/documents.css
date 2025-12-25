@@ -4,216 +4,275 @@
 
 /* Section Header */
 .section-headers {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .section-headers .title {
-    margin: 0;
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--label);
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--label);
 }
 
 #btnNewInvoice {
-    background: var(--btn-bg);
-    color: var(--btn-color);
-    transition: var(--transition-base);
+  background: var(--btn-bg);
+  padding: 0 1rem;
+  height: 38px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 30px;
+  color: var(--btn-color);
+  transition: var(--transition-base);
 }
 
 #btnNewInvoice:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
+  opacity: 0.9;
+  cursor: pointer;
 }
 
 /* Form Container Animation */
 .form-container {
-    animation: fadeInUp 0.3s ease;
+  animation: fadeInUp 0.3s ease;
+  width: 100%;
+}
+
+.form-container .form {
+  width: 80%;
 }
 
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Items Table Specific */
 #itemsTable {
-    margin-top: var(--space-md);
+  margin-top: var(--space-md);
+  width: 100%;
 }
 
 #itemsTable .item-total {
-    font-weight: 600;
-    color: var(--label);
-    font-size: 14px;
+  font-weight: 600;
+  color: var(--label);
+  font-size: 14px;
 }
 
 /* Table Wrapper for Items */
 .items-table-wrapper {
-    margin-top: 10px;
-    overflow: visible;
-    padding: 5px;
+  margin-top: 10px;
+  overflow: visible;
+  width: 100%;
+  padding: 5px;
 }
 
 .items-add-button {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 /* Total Display Section */
 .total-display-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
 }
 
 .total-display-content {
-    text-align: right;
+  text-align: right;
 }
 
 #displayTotal {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--first-color);
-    background: linear-gradient(135deg, var(--first-color), var(--apple-blue-hover));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--first-color);
+  background: linear-gradient(
+    135deg,
+    var(--first-color),
+    var(--apple-blue-hover)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Status Badges */
 .status-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .status-badge.payee,
 .status-badge.PAYE {
-    background: rgba(52, 199, 89, 0.15);
-    color: var(--success);
-    border: 1px solid rgba(52, 199, 89, 0.3);
+  background: rgba(52, 199, 89, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(52, 199, 89, 0.3);
 }
 
 .status-badge.en_attente,
 .status-badge.EN_COURS {
-    background: rgba(255, 159, 10, 0.15);
-    color: #FF9F0A;
-    border: 1px solid rgba(255, 159, 10, 0.3);
+  background: rgba(255, 159, 10, 0.15);
+  color: #ff9f0a;
+  border: 1px solid rgba(255, 159, 10, 0.3);
 }
 
 .status-badge.annulee,
 .status-badge.impaye,
 .status-badge.IMPAYE {
-    background: rgba(255, 69, 58, 0.15);
-    color: var(--danger);
-    border: 1px solid rgba(255, 69, 58, 0.3);
+  background: rgba(255, 69, 58, 0.15);
+  color: var(--danger);
+  border: 1px solid rgba(255, 69, 58, 0.3);
 }
 
 /* Documents Table Specific Styling */
 #documentsTable tbody tr {
-    background: var(--background);
-    color: var(--label);
-    transition: all 0.2s ease;
-    border-bottom: 1px solid var(--border-color);
+  background: var(--background);
+  color: var(--label);
+  transition: all 0.2s ease;
 }
 
 #documentsTable tbody tr:hover {
-    background: var(--sidebar-hover);
+  background: var(--sidebar-hover);
 }
 
 #documentsTable tbody td strong {
-    color: var(--first-color);
-    font-weight: 600;
+  color: var(--first-color);
+  font-weight: 600;
 }
 
 /* Small Action Buttons */
 .btn-small {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    height: 32px;
-    padding: 0 12px;
-    border-radius: var(--btn-radius);
-    border: 1px solid var(--border-color);
-    background: var(--background-light); /* Will adapt to theme */
-    color: var(--label);
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--btn-radius);
+  border: 1px solid var(--border-color);
+  background: var(--background-light); /* Will adapt to theme */
+  color: var(--label);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .btn-small:hover {
-    background: var(--first-color);
-    color: white;
-    border-color: var(--first-color);
+  background: var(--first-color);
+  color: white;
+  border-color: var(--first-color);
 }
 
 .btn-small.view {
-    background: rgba(0, 122, 255, 0.1);
-    border-color: rgba(0, 122, 255, 0.3);
-    color: var(--first-color);
+  background: rgba(0, 122, 255, 0.1);
+  border-color: rgba(0, 122, 255, 0.3);
+  color: var(--first-color);
 }
 
 .btn-small.print {
-    background: rgba(52, 199, 89, 0.1);
-    border-color: rgba(52, 199, 89, 0.3);
-    color: var(--success);
+  background: rgba(52, 199, 89, 0.1);
+  border-color: rgba(52, 199, 89, 0.3);
+  color: var(--success);
 }
 
 .btn-small.view:hover {
-    background: var(--first-color);
-    color: white;
+  background: var(--first-color);
+  color: white;
 }
 
 .btn-small.print:hover {
-    background: var(--success);
-    color: white;
+  background: var(--success);
+  color: white;
 }
 
 /* Compact Inputs for Items Table */
 #itemsTable .item-select,
 #itemsTable .item-qty,
 #itemsTable .item-price {
-    height: 32px; /* Reduced from default 40px */
-    padding: 0 8px;
-    font-size: 13px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border-color);
-    background: var(--background);
-    color: var(--label);
-    width: 100%;
+  height: 26px;
+  padding: 0 6px;
+  font-size: 13px;
+  border-radius: 0;
+  border: none;
+  background: var(--background-light);
+  color: var(--label);
+  outline: none;
+  width: 100%;
 }
 
-#itemsTable .group {
-    margin: 0 !important; /* Force remove margin */
+#itemsTable tr {
+  /* background: red; */
+  border: none !important;
 }
 
+#itemsTable tr td {
+  /* background: blue; */
+  padding: 2px;
+}
+
+.group select > *,
+#itemsTable .item-select > * {
+  color: var(--label-reverse);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  min-width: 90px;
+}
+
+.group select,
+.group input {
+  border: var(--border);
+  height: 50px;
+  padding: 0 1rem;
+  border-radius: 50px;
+  background-color: transparent;
+  outline: none;
+  width: 100%;
+}
+.group:has(select) label {
+  transform: translateY(-100%);
+  font-size: 0.8rem;
+  color: var(--first-color);
+  background-color: var(--first-color);
+  color: white;
+  opacity: 1;
+  padding: 0.1rem 0.3rem;
+  border-radius: 1rem;
+  top: 20%;
+  z-index: 10;
+}
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-    .section-headers {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--space-md);
-    }
+  .section-headers {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
 
-    #itemsTable {
-        font-size: 12px;
-    }
+  #itemsTable {
+    font-size: 12px;
+  }
 
-    #displayTotal {
-        font-size: 22px;
-    }
+  #displayTotal {
+    font-size: 22px;
+  }
 }

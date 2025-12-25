@@ -1,13 +1,12 @@
 @font-face {
   font-family: f;
-  src: url(../fonts/ProductSans-Regular.ttf);
+  src: url(../fonts/sf-pro-display.ttf);
 }
-
 
 :root {
   /* Couleurs principales */
-  --first-color: #3e68ff;
-  --first-text-color: #3367D1;
+  --first-color: orange;
+  --first-text-color: #3367d1;
   --second-color: #e94343;
   --accent-color: #4cdb94;
 
@@ -18,7 +17,7 @@
   --body-bg: rgba(0, 0, 0, 0.9);
   --label: #ffffff;
   --background-light: rgba(255, 255, 255, 0.05);
-  --background-dark: rgba(0, 0, 0, 0.1);
+  --background-dark: rgba(255, 255, 255, 0.1);
   --border-color: rgba(255, 255, 255, 0.1);
   --border: 1px solid var(--border-color);
   --black: black;
@@ -33,7 +32,7 @@
   --border-reverse: 1px solid var(--border-color-reverse);
 
   /* Typographie */
-  --font-main: f, 'SF Pro rounded', system-ui, sans-serif;
+  --font-main: f, "SF Pro rounded", system-ui, sans-serif;
   --label-second: #9b9b9b;
   --label-tertiary: #bbbbbb;
   --font-size-small: 0.875rem;
@@ -104,8 +103,6 @@
     --btn-color: white;
   }
 }
-
-
 
 * {
   margin: 0;
