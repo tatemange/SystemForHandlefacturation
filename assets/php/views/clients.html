@@ -1,12 +1,16 @@
 <!-- Lien CSS spécifique (si non inclus dans dashboard.php) -->
 <link rel="stylesheet" href="assets/css/form.css" />
+<link rel="stylesheet" href="assets/css/clients.css" />
 
 <!-- Zone de notifications Toast -->
 <div id="notification-area"></div>
 
 <div class="main-container">
   <!-- 1. TABLEAU DES CLIENTS -->
-  <h2 class="title">Liste des clients</h2>
+  <div class="clients-header">
+      <h2 class="title">Liste des clients</h2>
+      <input type="text" id="searchClients" placeholder="Rechercher un client..." class="clients-search-input">
+  </div>
   <div class="table-wrapper">
     <table class="table" id="clientsTable">
       <thead>
@@ -28,8 +32,8 @@
   </div>
 
   <!-- 2. FORMULAIRE D'AJOUT -->
-  <form id="addClientForm" class="sign-in form" style="width: 100%">
-    <fieldset style="box-shadow: none">
+  <form id="addClientForm" class="sign-in form form-full-width">
+    <fieldset class="fieldset-no-shadow">
       <legend>Ajouter un client</legend>
 
       <div class="note">
@@ -40,7 +44,7 @@
       </div>
 
       <div class="doubleGroup">
-        <div class="group" style="flex: 1">
+        <div class="group flex-1">
           <label for="nom-cl">Nom</label>
           <input
             type="text"
@@ -51,7 +55,7 @@
             placeholder=""
           />
         </div>
-        <div class="group" style="flex: 1">
+        <div class="group flex-1">
           <label for="prenom-cl">Prénom</label>
           <input
             type="text"
@@ -61,7 +65,7 @@
             placeholder=""
           />
         </div>
-        <div class="group" style="flex: 1">
+        <div class="group flex-1">
           <label for="phone-cl">Téléphone</label>
           <input
             type="tel"
@@ -71,7 +75,7 @@
             placeholder=""
           />
         </div>
-        <div class="group" style="flex: 1">
+        <div class="group flex-1">
           <label for="email-cl">Email</label>
           <input
             type="email"
@@ -84,11 +88,10 @@
       </div>
 
       <!-- Boutons -->
-      <div class="group-end" style="flex-direction: row">
+      <div class="group-end group-row">
         <button
           type="submit"
-          class="btn-primary"
-          style="padding: 0 1rem"
+          class="btn-primary btn-padding"
           id="btnSubmitClient"
         >
           Ajouter le client
@@ -97,7 +100,45 @@
       </div>
     </fieldset>
   </form>
+  <!-- 4. MODAL MODIFICATION CLIENT -->
+  <div id="editClientModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeEditModal()">&times;</span>
+        <h2>Modifier Client</h2>
+        <form id="editClientForm" class="form form-modal-edit">
+            <input type="hidden" id="edit-id-cl">
+            <div class="group">
+                <label for="edit-nom-cl">Nom</label>
+                <input type="text" id="edit-nom-cl" required>
+            </div>
+            <div class="group">
+                <label for="edit-prenom-cl">Prénom</label>
+                <input type="text" id="edit-prenom-cl">
+            </div>
+            <div class="group">
+                <label for="edit-phone-cl">Téléphone</label>
+                <input type="tel" id="edit-phone-cl">
+            </div>
+            <div class="group">
+                <label for="edit-email-cl">Email</label>
+                <input type="email" id="edit-email-cl">
+            </div>
+            <div class="group-end modal-actions">
+                <button type="submit" class="btn-primary" id="btnUpdateClient">Enregistrer les modifications</button>
+                <button type="button" class="btn" onclick="closeEditModal()">Annuler</button>
+            </div>
+        </form>
+    </div>
+  </div>
+
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize Search for Clients
+        filterTable('searchClients', 'clientsTable');
+    });
+</script>
 
 <!-- 3. JAVASCRIPT NATIF (SANS JQUERY) -->
 <script>
@@ -123,6 +164,25 @@
       }, 4500);
     }
 
+    // --- GLOBALS ---
+    window.closeEditModal = function() {
+        document.getElementById('editClientModal').style.display = "none";
+    }
+
+    window.openEditModal = function(clientData) {
+        // Decode logic if passed as base64 or stored object. 
+        // Simpler: pass ID and fetch or pass individual fields.
+        // For simplicity here, we will attach data to button in loadClients.
+        
+        document.getElementById('edit-id-cl').value = clientData.id;
+        document.getElementById('edit-nom-cl').value = clientData.nom;
+        document.getElementById('edit-prenom-cl').value = clientData.prenom || '';
+        document.getElementById('edit-phone-cl').value = clientData.numero_telephone || '';
+        document.getElementById('edit-email-cl').value = clientData.email || '';
+
+        document.getElementById('editClientModal').style.display = "flex";
+    }
+
     // --- FONCTION : Charger les clients ---
     async function loadClients() {
       const tbody = document.querySelector("#clientsTable tbody");
@@ -135,6 +195,9 @@
 
         if (result.status === "success" && result.data.length > 0) {
           result.data.forEach((client) => {
+            // Escape quotes for onclick JSON
+            const clientJson = JSON.stringify(client).replace(/"/g, '&quot;');
+            
             tbody.innerHTML += `
                         <tr>
                             <td><strong>${client.nom}</strong> ${
@@ -146,7 +209,7 @@
                               client.solde
                             ).toLocaleString()} FCFA</td>
                             <td>
-                                <button class="btn-sm" onclick="alert('Modification à venir')">Modifier</button>
+                                <button class="btn-sm" onclick="openEditModal(${clientJson})">Modifier</button>
                             </td>
                         </tr>`;
           });
@@ -162,7 +225,7 @@
       }
     }
 
-    // --- EVENT : Soumission du formulaire ---
+    // --- EVENT : Soumission du formulaire d'AJOUT ---
     document
       .getElementById("addClientForm")
       .addEventListener("submit", async function (e) {
@@ -212,6 +275,48 @@
           btnSubmit.innerHTML = originalBtnText;
         }
       });
+      
+    // --- EVENT : Soumission du formulaire de MODIFICATION ---
+    document.getElementById("editClientForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+        
+        const btnSubmit = document.getElementById("btnUpdateClient");
+        const originalText = btnSubmit.innerHTML;
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Enregistrement...';
+        
+        const formData = {
+            id: document.getElementById("edit-id-cl").value,
+            nom: document.getElementById("edit-nom-cl").value,
+            prenom: document.getElementById("edit-prenom-cl").value,
+            telephone: document.getElementById("edit-phone-cl").value,
+            email: document.getElementById("edit-email-cl").value
+        };
+        
+        try {
+            const response = await fetch("assets/api/client_api.php", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
+            
+            const result = await response.json();
+            
+            if (result.status === "success") {
+                showNotification("Client mis à jour avec succès !", "success");
+                closeEditModal();
+                loadClients();
+            } else {
+                showNotification(result.message || "Erreur de mise à jour", "error");
+            }
+        } catch(error) {
+             console.error(error);
+             showNotification("Erreur technique.", "error");
+        } finally {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = originalText;
+        }
+    });
 
     // --- INITIALISATION ---
     loadClients();

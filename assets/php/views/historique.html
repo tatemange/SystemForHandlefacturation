@@ -1,0 +1,132 @@
+<div class="main-container">
+  <h2 class="title">Historique des transactions & actions</h2>
+  
+  <div class="filters-container" style="display:flex; gap: 1rem; margin-bottom: 1rem; align-items: center; flex-wrap: wrap;">
+    <!-- Filter by Entity Type -->
+    <select id="filterEntity" style="padding: 0.5rem; border-radius: 5px; border: 1px solid #ccc;">
+        <option value="">Toutes les entités</option>
+        <option value="CLIENT">Clients</option>
+        <option value="DOCUMENT">Documents</option>
+        <option value="REGLEMENT">Règlements</option>
+        <option value="SERVICE">Services</option>
+    </select>
+    
+    <!-- Search Input -->
+    <div class="search-box" style="position: relative;">
+        <input type="text" id="searchHistory" placeholder="Rechercher..." style="padding: 0.5rem 1rem; border-radius: 50px; border: 1px solid #ccc;  width: 250px;">
+    </div>
+
+    <button class="btn-primary" onclick="loadHistory()">Actualiser</button>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="table" id="historyTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type d'Entité</th>
+          <th>Action</th>
+          <th>Détails</th>
+          <th>Utilisateur (ID)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="5" style="text-align: center">Chargement...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const filterSelect = document.getElementById('filterEntity');
+        filterSelect.addEventListener('change', loadHistory);
+        
+        loadHistory();
+        
+        // Initialize Search
+        filterTable('searchHistory', 'historyTable');
+    });
+
+    async function loadHistory() {
+        const tbody = document.querySelector("#historyTable tbody");
+        const filter = document.getElementById('filterEntity').value;
+        let url = "assets/api/history_api.php";
+        
+        if (filter) {
+            url += `?entity_type=${filter}`;
+        }
+
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center"><i class="fa fa-spinner fa-spin"></i> Chargement...</td></tr>';
+
+        try {
+            const response = await fetch(url);
+            const result = await response.json();
+
+            tbody.innerHTML = "";
+
+            if (result.status === "success" && result.data.length > 0) {
+                result.data.forEach((log) => {
+                    let actionClass = "";
+                    switch(log.action) {
+                        case 'CREATE': actionClass = "badge-success"; break;
+                        case 'UPDATE': actionClass = "badge-warning"; break;
+                        case 'DELETE': actionClass = "badge-danger"; break;
+                        default: actionClass = "badge-info";
+                    }
+                    
+                    // Format date nicely
+                    const dateObj = new Date(log.date_action);
+                    const dateStr = dateObj.toLocaleString('fr-FR');
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${dateStr}</td>
+                            <td><span class="tag">${log.entity_type}</span></td>
+                            <td><span class="status-badge ${actionClass}" style="padding: 2px 8px; border-radius: 4px; font-size: 0.85em;">${log.action}</span></td>
+                            <td>${log.details || '-'}</td>
+                            <td>${log.user_id || 'Système'}</td>
+                        </tr>`;
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">Aucun historique trouvé.</td></tr>';
+            }
+        } catch (error) {
+            console.error(error);
+            tbody.innerHTML = '<tr><td colspan="5" style="color:red; text-align:center;">Erreur lors du chargement de l\'historique.</td></tr>';
+        }
+    }
+</script>
+
+<style>
+  #filterEntity {
+    border: var(--border) !important;
+  height: 36px;
+  padding: 0 1rem;
+  border-radius: 50px !important;
+  background-color: transparent;
+  outline: none;
+  font-size: 1rem;
+  /* width: 100%; */
+  }
+.filters-container .btn-primary {
+  background-color: var(--btn-bg);
+  color: var(--btn-color);
+  padding: 0 1rem;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+}
+  #filterEntity option{
+    background-color: var(--background  ) !important;
+    color: var(--label) !important;
+
+  }
+    .badge-success { background-color: #d4edda; color: #155724; }
+    .badge-warning { background-color: #fff3cd; color: #856404; }
+    .badge-danger { background-color: #f8d7da; color: #721c24; }
+    .badge-info { background-color: #d1ecf1; color: #0c5460; }
+    .tag { font-weight: bold; font-size: 0.9em; color: #555; }
+</style>

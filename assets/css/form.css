@@ -180,7 +180,7 @@ form .group:has(input:focus) label {
   padding: 0.1rem 0.3rem;
   border-radius: 1rem;
   top: 20%;
-  z-index: 10;
+  z-index: 100;
 }
 
 form .group-end {
@@ -243,3 +243,47 @@ form .doubleGroup .group {
     padding: 0 10px;
   }
 }
+
+/* --- MODAL STYLES --- */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+}
+
+/* --- MODAL STYLES (Use .modal and .modal-content from style.css) --- */
+/* Kept empty or specific form overrides if necessary */
+
+.close-modal {
+  color: var(--label-second);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+  color: var(--first-color);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Modal Title */
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: var(--label);
+    text-align: center;
+}
+
+

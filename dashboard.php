@@ -55,6 +55,7 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
     <link rel="stylesheet" href="./assets/css/form.css">
     <link rel="stylesheet" href="./assets/css/documents.css">
     <link rel="stylesheet" href="./assets/css/caisse.css">
+    <link rel="stylesheet" href="./assets/css/services.css">
 
 </head>
 
@@ -165,14 +166,14 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
 
             // CAS 4 : SERVICES
             case 'services':
-                // include 'assets/php/views/services.html';
-                echo "<h2>Page Services (En construction)</h2>";
+                include 'assets/php/views/services.html';
+                // echo "<h2>Page Services (En construction)</h2>";
                 break;
 
             // CAS 5 : HISTORIQUE
             case 'historique':
-                // include 'assets/php/views/historique.html';
-                echo "<h2>Page Historique (En construction)</h2>";
+                include 'assets/php/views/historique.html';
+                // echo "<h2>Page Historique (En construction)</h2>";
                 break;
 
             // CAS PAR DÉFAUT : ACCUEIL / TABLEAU DE BORD
@@ -304,6 +305,7 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
     <script src="./assets/js/main.js"></script>
     <script src="./assets/js/documents.js"></script>
     <script src="./assets/js/reglements.js"></script>
+    <script src="./assets/js/services.js"></script>
 </body>
 
 </html>

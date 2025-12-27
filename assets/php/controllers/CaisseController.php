@@ -6,6 +6,7 @@ require_once '../config/Database.php';
 require_once '../models/CaisseModel.php';
 require_once '../models/ReglementModel.php';
 require_once '../models/EnregistrerModel.php';
+require_once '../models/HistoriqueModel.php'; // Included
 
 session_start();
 
@@ -15,8 +16,10 @@ $db = $database->conn;
 $caisseModel = new CaisseModel($db);
 $reglementModel = new ReglementModel($db);
 $enregistrerModel = new EnregistrerModel($db);
+$historyModel = new HistoriqueModel($db); // Initialized
 
 $action = $_GET['action'] ?? '';
+$adminId = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 1;
 
 // Sécurité basique
 if (!isset($_SESSION['admin_id'])) {
@@ -64,6 +67,10 @@ switch ($action) {
             // Lier à la caisse (EN_ATTENTE)
             $res = $enregistrerModel->enregistrerPaiement($id_caisse, $id_reglement);
             if($res) {
+                // Log History
+                $details = "Enregistrement règlement: $montant FCFA (Mode: $mode)";
+                $historyModel->create('REGLEMENT', $id_reglement, 'CREATE', $details, $adminId);
+
                 echo json_encode(['success' => true, 'message' => 'Règlement créé et en attente de validation']);
             } else {
                 echo json_encode(['success' => false, 'message' => 'Erreur lors de l\'enregistrement en caisse']);
@@ -81,6 +88,9 @@ switch ($action) {
         $result = $enregistrerModel->validerReglement($id_reglement, $id_caisse);
         
         if ($result === true) {
+            // Log History
+            $historyModel->create('REGLEMENT', $id_reglement, 'UPDATE', "Validation règlement", $adminId);
+
             echo json_encode(['success' => true, 'message' => 'Règlement validé avec succès']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Erreur validation: ' . $result]);
@@ -94,6 +104,9 @@ switch ($action) {
          
          $result = $enregistrerModel->annulerReglement($id_reglement, $id_caisse);
          if($result === true) {
+             // Log History
+             $historyModel->create('REGLEMENT', $id_reglement, 'UPDATE', "Annulation règlement", $adminId);
+
              echo json_encode(['success' => true, 'message' => 'Règlement annulé']);
          } else {
              echo json_encode(['success' => false, 'message' => 'Erreur annulation']);

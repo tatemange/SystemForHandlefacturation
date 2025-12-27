@@ -1,0 +1,107 @@
+<div class="documents-header">
+    <div class="header-content">
+        <h1><i class="fa fa-box"></i> Produits & Services</h1>
+        <p>Gestion du catalogue et des stocks</p>
+    </div>
+    <div class="header-actions">
+        <button class="btn btn-primary" onclick="resetForm()">
+            <i class="fa fa-plus"></i> Nouveau
+        </button>
+    </div>
+</div>
+
+<div class="row-layout">
+    <!-- COL 1: Formulaire (Ajout / Edition) -->
+    <div class="card card-form">
+        <div class="card-header">
+            <h3 id="form-title"><i class="fa fa-plus-circle"></i> Nouveau Produit / Service</h3>
+        </div>
+        <div class="card-body">
+            <form id="form-service">
+                <input type="hidden" id="service-id">
+                
+                <div class="group">
+                    <label>Type <span class="required">*</span></label>
+                    <select id="service-type" class="form-control" onchange="toggleStockField()">
+                        <option value="0">Produit</option>
+                        <option value="1">Service</option>
+                    </select>
+                </div>
+
+                <div class="group">
+                    <label>Libellé (Ex: Abonnement, Clavier) <span class="required">*</span></label>
+                    <input type="text" id="service-libelle" class="form-control" required placeholder="">
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="service-desc" class="form-control" rows="2" placeholder="Courte description..."></textarea>
+                </div>
+
+                <div class="doubleGroup">
+                    <div class="group">
+                        <label>Prix Achat</label>
+                        <input type="number" id="service-pa" class="form-control" placeholder="">
+                    </div>
+                    <div class="group">
+                        <label>Prix Vente <span class="required">*</span></label>
+                        <input type="number" id="service-pv" class="form-control" required placeholder="">
+                    </div>
+                </div>
+
+                <!-- Stock: Visible seulement si Produit -->
+                <div class="form-group" id="group-stock">
+                    <label>Stock Actuel</label>
+                    <input type="number" id="service-stock" class="form-control" placeholder="0">
+                    <small style="color:var(--label-second)">Modifiez pour ajuster manuellement.</small>
+                </div>
+                <div class="form-group-end" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-success full-width">
+                        <i class="fa fa-save"></i> Enregistrer
+                    </button>
+                    <button type="button" class="btn full-width" onclick="resetForm()" style="border:1px solid var(--border-color); background:transparent; color:var(--label);">
+                        Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- COL 2: Liste des Produits -->
+    <div class="card card-list">
+        <div class="card-header">
+            <h3>Catalogue</h3>
+            <input type="text" id="searchServices" placeholder="Rechercher..." style="padding: 0.5rem 1rem; border-radius: 50px; border: 1px solid var(--border-color); width: 250px; background: transparent;">
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped" id="table-services">
+                    <thead>
+                        <tr>
+                            <th>Libellé</th>
+                            <th>Type</th>
+                            <th>Prix Vente</th>
+                            <th>Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-services">
+                        <tr><td colspan="5" class="text-center">Chargement...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize Search for Services (using generic DOM filter)
+        // Note: Services.js has its own loader but we can use the DOM filter for simplicity 
+        // as long as data is rendered.
+        // However, services.js renders data async. 
+        // filterTable waits for keyup, so it's fine. 
+        filterTable('searchServices', 'table-services');
+    });
+</script>

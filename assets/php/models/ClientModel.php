@@ -48,10 +48,18 @@ class ClientModel {
         if ($stmt) {
             mysqli_stmt_bind_param($stmt, "ssss", $nom, $prenom, $tel, $email);
             $exec = mysqli_stmt_execute($stmt);
+            $newId = $exec ? mysqli_stmt_insert_id($stmt) : false;
             mysqli_stmt_close($stmt);
-            return $exec;
+            return $newId;
         } else {
             return false;
         }
+    }
+
+    public function updateClient($id, $nom, $prenom, $tel, $email) {
+        $sql = "UPDATE $this->table SET nom = ?, prenom = ?, numero_telephone = ?, email = ? WHERE id = ?";
+        $stmt = mysqli_prepare($this->conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'ssssi', $nom, $prenom, $tel, $email, $id);
+        return mysqli_stmt_execute($stmt);
     }
 }

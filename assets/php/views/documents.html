@@ -2,13 +2,16 @@
   <!-- HEADER & ACTIONS -->
   <div class="section-headers">
     <h2 class="title">Factures</h2>
-    <button
-      id="btnNewInvoice"
-      class="btn-primary"
-      onclick="toggleInvoiceForm()"
-    >
-      <i class="fa fa-plus"></i> Nouvelle Facture
-    </button>
+    <div style="display:flex; gap: 10px; align-items:center;">
+        <input type="text" id="searchDocuments" placeholder="Rechercher une facture..." style="padding: 0.5rem 1rem; border-radius: 50px; border: 1px solid var(--border-color); width: 250px; background: transparent;">
+        <button
+        id="btnNewInvoice"
+        class="btn-primary"
+        onclick="toggleInvoiceForm()"
+        >
+        <i class="fa fa-plus"></i> Nouvelle Facture
+        </button>
+    </div>
   </div>
 
   <!-- 1. TABLEAU DES FACTURES (LISTE) -->
@@ -93,5 +96,11 @@
         </div>
       </fieldset>
     </form>
-  </div>
+
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        filterTable('searchDocuments', 'documentsTable');
+    });
+</script>

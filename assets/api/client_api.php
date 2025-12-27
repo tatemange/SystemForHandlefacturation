@@ -10,14 +10,18 @@ header('Content-Type: application/json');
 // }
 
 // --- 2. INCLUSION DU MODÈLE ---
+// --- 2. INCLUSION DES MODÈLES ---
 require_once __DIR__ . '/../php/models/ClientModel.php';
+require_once __DIR__ . '/../php/models/HistoriqueModel.php'; // Included
 require_once __DIR__ . '/../php/config/Database.php';
 
 $database = new Database();
 $db = $database->conn;
 $clientModel = new ClientModel($db);
+$historyModel = new HistoriqueModel($db); // Initialized
 
 $method = $_SERVER['REQUEST_METHOD'];
+$adminId = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 1; // Default to 1 if no session (dev mode) or fetched from session
 
 // --- 3. TRAITEMENT GET (Récupérer la liste) ---
 if ($method === 'GET') {
@@ -38,13 +42,54 @@ if ($method === 'POST') {
         $tel = htmlspecialchars($data['telephone'] ?? '');
         $email = htmlspecialchars($data['email'] ?? '');
 
-        if ($clientModel->addClient($nom, $prenom, $tel, $email)) {
+        // Note: ClientModel::addClient currently returns boolean. 
+        // We need the ID for history. 
+        // Ideally we should update ClientModel to return ID or use insert_id.
+        // For now, let's try to update ClientModel first or do a workaround?
+        // Actually, let's update ClientModel to return the ID instead of boolean in the next step.
+        // Assuming ClientModel will be updated to return ID or we act on success.
+        
+        $newId = $clientModel->addClient($nom, $prenom, $tel, $email);
+
+        if ($newId) {
+            // Log History
+            $details = "Nom: $nom, Prénom: $prenom";
+            $historyModel->create('CLIENT', $newId, 'CREATE', $details, $adminId);
+
             echo json_encode(['status' => 'success', 'message' => 'Client ajouté avec succès']);
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Erreur lors de l\'enregistrement en base de données']);
         }
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Le champ NOM est obligatoire']);
+    }
+    exit;
+}
+
+// --- 5. TRAITEMENT PUT (Modifier un client) ---
+if ($method === 'PUT') {
+    $inputJSON = file_get_contents('php://input');
+    $data = json_decode($inputJSON, true);
+
+    if (isset($data['id']) && isset($data['nom'])) {
+        $id = intval($data['id']);
+        $nom = htmlspecialchars($data['nom']);
+        $prenom = htmlspecialchars($data['prenom'] ?? '');
+        $tel = htmlspecialchars($data['telephone'] ?? '');
+        $email = htmlspecialchars($data['email'] ?? '');
+
+        // We need a method updateClient in ClientModel
+        if ($clientModel->updateClient($id, $nom, $prenom, $tel, $email)) {
+             // Log History
+             $details = "Mise à jour Client ID: $id. Nom: $nom";
+             $historyModel->create('CLIENT', $id, 'UPDATE', $details, $adminId);
+             
+             echo json_encode(['status' => 'success', 'message' => 'Client modifié avec succès']);
+        } else {
+             echo json_encode(['status' => 'error', 'message' => 'Erreur lors de la modification']);
+        }
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'ID et Nom requis']);
     }
     exit;
 }

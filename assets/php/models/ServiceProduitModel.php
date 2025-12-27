@@ -52,6 +52,17 @@ class ServiceProduitModel
         return mysqli_stmt_execute($stmt);
     }
 
+    public function incrementStock($id, $qty) {
+        $item = $this->getById($id);
+        if (!$item || $item['est_service'] == 1) return true; // Rien à faire si Service
+
+        // Incrémentation (Restock)
+        $sql = "UPDATE $this->table SET quantite_stock = quantite_stock + ? WHERE id = ?";
+        $stmt = mysqli_prepare($this->conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'ii', $qty, $id);
+        return mysqli_stmt_execute($stmt);
+    }
+
     // Gestion Création / Update avec Stock
     public function create($libelle, $prix_vente, $prix_achat, $est_service, $description, $quantite_stock = 0)
     {
