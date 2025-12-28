@@ -17,7 +17,14 @@ $detailModel = new DetailDocumentModel($db->conn);
 $historyModel = new HistoriqueModel($db->conn); // Initialized
 
 $method = $_SERVER['REQUEST_METHOD'];
-$adminId = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 1;
+
+// SECURITY CHECK
+if (!isset($_SESSION['admin_id'])) {
+    http_response_code(403);
+    echo json_encode(['status' => 'error', 'message' => 'Accès refusé. Veuillez vous connecter.']);
+    exit;
+}
+$adminId = $_SESSION['admin_id'];
 
 try {
 

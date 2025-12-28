@@ -30,7 +30,7 @@ $resCA = mysqli_query($db, $sqlCA);
 $caTotal = mysqli_fetch_assoc($resCA)['total'] ?? 0;
 
 // Récupérer les 5 dernières factures
-$sqlLastDocs = "SELECT d.numero_d, d.date_creation, d.montant_total, d.status, c.nom, c.prenom 
+$sqlLastDocs = "SELECT d.id_document, d.numero_d, d.date_creation, d.montant_total, d.status, c.nom, c.prenom 
                 FROM DOCUMENT d 
                 JOIN CLIENT c ON d.id_client = c.id 
                 ORDER BY d.date_creation DESC LIMIT 5";
@@ -272,10 +272,10 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
                                         </span>
                                     </td>
                                     <td>
-                                        <button class="btn-small view" onclick="alert('Voir facture')">
+                                        <button class="btn-small view" onclick="window.location.href='dashboard.php?page=documents&open_id=<?php echo $doc['id_document']; ?>'" title="Voir / Modifier">
                                             <i class="fa fa-eye"></i>
                                         </button>
-                                        <button class="btn-small print" onclick="alert('Imprimer')">
+                                        <button class="btn-small print" onclick="window.open('print_invoice.php?id=<?php echo $doc['id_document']; ?>', '_blank')" title="Imprimer">
                                             <i class="fa fa-print"></i>
                                         </button>
                                     </td>

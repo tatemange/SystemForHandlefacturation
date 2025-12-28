@@ -26,6 +26,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (form) {
         form.addEventListener('submit', handleInvoiceSubmit);
     }
+
+    // Check for open_id param from dashboard redirection
+    const urlParams = new URLSearchParams(window.location.search);
+    const openId = urlParams.get('open_id');
+    if (openId) {
+        viewInvoice(openId);
+        // Clean URL to prevent reopening on refresh
+        urlParams.delete('open_id');
+        const newSearch = urlParams.toString();
+        const newUrl = window.location.pathname + (newSearch ? '?' + newSearch : '');
+        window.history.replaceState({}, '', newUrl);
+    }
 });
 
 /**

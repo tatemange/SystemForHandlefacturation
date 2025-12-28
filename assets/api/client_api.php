@@ -21,12 +21,29 @@ $clientModel = new ClientModel($db);
 $historyModel = new HistoriqueModel($db); // Initialized
 
 $method = $_SERVER['REQUEST_METHOD'];
-$adminId = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 1; // Default to 1 if no session (dev mode) or fetched from session
 
-// --- 3. TRAITEMENT GET (Récupérer la liste) ---
+// SÉCURITÉ: Authentification requise
+if (!isset($_SESSION['admin_id'])) {
+    http_response_code(403);
+    echo json_encode(['status' => 'error', 'message' => 'Accès refusé.']);
+    exit;
+}
+$adminId = $_SESSION['admin_id'];
+
+// --- 3. TRAITEMENT GET (Récupérer la liste ou un client) ---
 if ($method === 'GET') {
-    $clients = $clientModel->getAllClients();
-    echo json_encode(['status' => 'success', 'data' => $clients]);
+    if (isset($_GET['id'])) {
+        $id = intval($_GET['id']);
+        $client = $clientModel->getById($id);
+        if ($client) {
+            echo json_encode(['status' => 'success', 'data' => $client]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Client introuvable']);
+        }
+    } else {
+        $clients = $clientModel->getAllClients();
+        echo json_encode(['status' => 'success', 'data' => $clients]);
+    }
     exit;
 }
 

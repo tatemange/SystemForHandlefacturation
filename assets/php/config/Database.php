@@ -4,16 +4,22 @@
 
 class Database
 {
-    private $host = "localhost";
-    private $username = "root";
-    private $password = "";
-    private $dbname = "facturation";
+    private $host;
+    private $username;
+    private $password;
+    private $dbname;
     public $conn;
 
     public function __construct()
     {
+        require_once __DIR__ . '/config.php';
+        
+        $this->host = DB_HOST;
+        $this->username = DB_USER;
+        $this->password = DB_PASS;
+        $this->dbname = DB_NAME;
+
         $this->connectDB();
-        // echo "connexion reussi";
     }
 
     public function connectDB()

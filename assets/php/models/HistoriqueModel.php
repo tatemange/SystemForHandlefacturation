@@ -19,19 +19,36 @@ class HistoriqueModel
         return mysqli_stmt_execute($stmt);
     }
     
-    public function getAll() {
-        // Create lookup array for easy entity name resolution if needed later
-        // For now, raw data is fine
-        $sql = "SELECT * FROM $this->table ORDER BY date_action DESC";
-        $result = mysqli_query($this->conn, $sql);
+    // Récupérer tout avec pagination
+    public function getAll($limit = 50, $offset = 0) {
+        $sql = "SELECT * FROM $this->table ORDER BY date_action DESC LIMIT ? OFFSET ?";
+        $stmt = mysqli_prepare($this->conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'ii', $limit, $offset);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
-    // Filter by entity type (e.g., 'CLIENT', 'DOCUMENT')
-    public function getByEntityType($entity_type) {
-        $sql = "SELECT * FROM $this->table WHERE entity_type = ? ORDER BY date_action DESC";
+    // Filtrer par type avec pagination
+    public function getByEntityType($entity_type, $limit = 50, $offset = 0) {
+        $sql = "SELECT * FROM $this->table WHERE entity_type = ? ORDER BY date_action DESC LIMIT ? OFFSET ?";
         $stmt = mysqli_prepare($this->conn, $sql);
-        mysqli_stmt_bind_param($stmt, 's', $entity_type);
+        mysqli_stmt_bind_param($stmt, 'sii', $entity_type, $limit, $offset);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
+    // Recherche globale
+    public function search($term) {
+        $termLike = "%" . $term . "%";
+        $sql = "SELECT * FROM $this->table 
+                WHERE details LIKE ? 
+                OR entity_type LIKE ? 
+                OR action LIKE ?
+                ORDER BY date_action DESC LIMIT 100"; // Limit search results too for safety
+        $stmt = mysqli_prepare($this->conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'sss', $termLike, $termLike, $termLike);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
