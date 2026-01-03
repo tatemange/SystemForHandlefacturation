@@ -788,6 +788,17 @@ tbody td {
     color: white;
 }
 
+.btn-small.printer {
+    background: rgba(100, 100, 100, 0.1);
+    border-color: rgba(100, 100, 100, 0.3);
+    color: var(--label);
+}
+
+.btn-small.printer:hover {
+    background: var(--label);
+    color: var(--background);
+}
+
 /* Responsive Adjustments for Documents */
 @media (max-width: 768px) {
     .section-headers {

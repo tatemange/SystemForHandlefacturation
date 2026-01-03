@@ -10,7 +10,9 @@ class DocumentModel {
     }
 
     public function getAll(){
-        $sql = "SELECT d.*, c.nom, c.prenom 
+        // Use subquery to avoid ONLY_FULL_GROUP_BY issues
+        $sql = "SELECT d.*, c.nom, c.prenom, 
+                (SELECT COALESCE(SUM(montant), 0) FROM REGLEMENT WHERE id_document = d.id_document) as montant_regle
                 FROM $this->table d
                 JOIN CLIENT c ON d.id_client = c.id
                 ORDER BY d.date_creation DESC";
@@ -22,7 +24,10 @@ class DocumentModel {
     }
 
     public function getById($id){
-        $sql = "SELECT * FROM $this->table WHERE id_document=?";
+        $sql = "SELECT d.*, 
+                COALESCE((SELECT SUM(montant) FROM REGLEMENT WHERE id_document = d.id_document), 0) as montant_regle
+                FROM $this->table d 
+                WHERE id_document=?";
         $stmt = mysqli_prepare($this->conn, $sql);
         mysqli_stmt_bind_param($stmt, 'i', $id);
         mysqli_stmt_execute($stmt);

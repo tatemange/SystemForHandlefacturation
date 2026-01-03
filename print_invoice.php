@@ -42,7 +42,7 @@ $clientModel = new ClientModel($db->conn);
 $client = $clientModel->getById($doc['id_client']);
 
 // 3. Infos entreprise
-$companyName = "mobilemoney";
+$companyName = "CISCO informatique";
 $companyAddress = "Bafoussam, Cameroun";
 $companyPhone = ""; // Demande utilisateur: "tu ne met rien"
 
@@ -158,13 +158,13 @@ if ($doc['status'] == 'PAYE' || $doc['status'] == 'EN_COURS') { // Check regs ev
     </div>
 
     <div class="client-info">
-        <strong>Facturé à :</strong><br>
+        <strong>Facturé à :</strong> 
         <?php 
             if(isset($client) && $client) {
                 echo $client['nom'] . ' ' . $client['prenom'] . '<br>';
-                echo 'Ref Client: ' . $client['id'] . '<br>';
-                if(!empty($client['email'])) echo $client['email'] . '<br>';
-                if(!empty($client['numero_telephone'])) echo $client['numero_telephone'];
+                echo 'Ref Client ( ID ): ' . $client['id'] . '<br>';
+                if(!empty($client['email'])) echo 'Email: '. $client['email'] . '<br>';
+                if(!empty($client['numero_telephone'])) echo 'Telephone: ' . $client['numero_telephone'];
             } else {
                 echo "Client Inconnu (ID " . $doc['id_client'] . ")";
             }

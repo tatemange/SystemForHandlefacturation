@@ -61,20 +61,49 @@ async function loadDocuments() {
                 if (doc.status === 'IMPAYE') statusClass = 'annulee';
 
                 const dateDisplay = new Date(doc.date_creation).toLocaleDateString('fr-FR');
-                const montantDisplay = parseFloat(doc.montant_total).toLocaleString('fr-FR');
+                // Partial Logic
+                const total = parseFloat(doc.montant_total) || 0;
+                const montantDisplay = total.toLocaleString('fr-FR'); // Fixed: Defined here
+                const paid = parseFloat(doc.montant_regle) || 0;
+                const left = total - paid;
+
+                // Status Logic Update
+                if (paid >= total && total > 0) {
+                    statusClass = 'payee';
+                    doc.status = 'PAYE';
+                } else if (paid > 0 && paid < total) {
+                    statusClass = 'en_attente'; // or custom 'partiel' class if CSS exists
+                    doc.status = 'PARTIEL';
+                }
+
+                // Progress Bar
+                const pct = total > 0 ? Math.min(100, (paid / total) * 100) : 0;
+                // Use a visual progress bar or simpler text
+                const paymentDisplay = `
+                    <div style="font-size:0.85rem;">
+                        <div>${montantDisplay} FCFA</div>
+                        ${paid > 0 && paid < total ? `<div style="color:var(--first-color); font-weight:bold; font-size:0.75rem;">Réglé: ${paid.toLocaleString('fr-FR')}</div>` : ''}
+                    </div>
+                `;
 
                 tbody.innerHTML += `
                     <tr>
                         <td>${dateDisplay}</td>
                         <td><strong>${doc.numero_d}</strong></td>
                         <td>${doc.nom} ${doc.prenom || ''}</td>
-                        <td>${montantDisplay} FCFA</td>
+                        <td>${paymentDisplay}</td>
                         <td><span class="status-badge ${statusClass}">${doc.status}</span></td>
                         <td>
                             <button class="btn-small view" onclick="viewInvoice(${doc.id_document})" title="Voir / Modifier">
                                 <i class="fa fa-eye"></i>
                             </button>
-                            ${doc.status !== 'PAYE' ? `<button class="btn-small print" onclick="markAsPaid(${doc.id_document})" title="Marquer comme payé"><i class="fa fa-check"></i></button>` : ''}
+                            <button class="btn-small printer" onclick="window.open('print_invoice.php?id=${doc.id_document}', '_blank')" title="Imprimer">
+                                <i class="fa fa-print"></i>
+                            </button>
+                            ${doc.status !== 'PAYE' ? `
+                            <button class="btn-small print" onclick="openPaymentModal(${doc.id_document}, '${doc.numero_d}', ${total}, ${paid})" title="Encaisser" style="background:var(--success-color); color:white;">
+                                <i class="fa fa-hand-holding-usd"></i>
+                            </button>` : ''}
                         </td>
                     </tr>`;
             });
@@ -82,7 +111,8 @@ async function loadDocuments() {
             tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Aucune facture trouvée.</td></tr>';
         }
     } catch (e) {
-        tbody.innerHTML = '<tr><td colspan="6" style="color:red">Erreur chargement.</td></tr>';
+        console.error("Load Error:", e);
+        tbody.innerHTML = `<tr><td colspan="6" style="color:red">Erreur: ${e.message}</td></tr>`;
     }
 }
 
@@ -495,25 +525,64 @@ async function handleInvoiceSubmit(e) {
  * Mark an invoice as PAID
  * @param {number} id - The document ID
  */
-async function markAsPaid(id) {
-    if (!confirm('Voulez-vous marquer cette facture comme PAYÉE ?')) return;
+/**
+ * Open Payment Modal
+ */
+function openPaymentModal(id, num, total, paid) {
+    const modal = document.getElementById('paymentModal');
+    if (!modal) return;
+
+    const left = total - paid;
+
+    document.getElementById('pay_doc_id').value = id;
+    document.getElementById('pay_doc_num').value = num;
+    document.getElementById('pay_doc_total').value = total.toLocaleString('fr-FR');
+    document.getElementById('pay_doc_paid').value = paid.toLocaleString('fr-FR');
+    document.getElementById('pay_doc_left').value = left.toLocaleString('fr-FR'); // Display formatted
+
+    const inputAmount = document.getElementById('pay_amount');
+    inputAmount.value = left; // Default to full remaining
+    inputAmount.max = left; // Optional constraint
+
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+}
+
+/**
+ * Submit Payment
+ */
+async function submitPayment() {
+    const id = document.getElementById('pay_doc_id').value;
+    const amount = document.getElementById('pay_amount').value;
+    const mode = document.getElementById('pay_mode').value;
+
+    if (!amount || amount <= 0) {
+        alert("Montant invalide");
+        return;
+    }
 
     try {
-        const response = await fetch('assets/api/document_api.php', {
-            method: 'PUT',
+        const response = await fetch('assets/api/reglement_api.php', {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: id, status: 'PAYE' })
+            body: JSON.stringify({
+                id_document: id,
+                montant: amount,
+                mode_paiement: mode
+            })
         });
         const result = await response.json();
 
         if (result.status === 'success') {
-            // alert('Facture mise à jour !');
+            alert('Paiement enregistré avec succès !');
+            document.getElementById('paymentModal').style.display = 'none';
             loadDocuments(); // Reload table
         } else {
             alert('Erreur: ' + result.message);
         }
     } catch (e) {
-        console.error('Error updating status:', e);
-        alert('Erreur technique');
+        console.error("Error submitting payment", e);
+        alert("Erreur technique");
     }
 }
