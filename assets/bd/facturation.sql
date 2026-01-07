@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : ven. 21 nov. 2025 à 10:26
+-- Généré le : mer. 07 jan. 2026 à 21:19
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.2.4
 
@@ -20,6 +20,28 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `facturation`
 --
+CREATE DATABASE IF NOT EXISTS facturation;
+USE facturation;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `ADMIN`
+--
+
+CREATE TABLE `ADMIN` (
+  `id_admin` int(11) NOT NULL,
+  `nom` varchar(50) NOT NULL,
+  `prenom` varchar(50) DEFAULT NULL,
+  `username` varchar(50) NOT NULL,
+  `telephone` varchar(20) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `mot_de_passe` varchar(255) NOT NULL,
+  `role` enum('SUPER_ADMIN','ADMIN','GESTIONNAIRE') NOT NULL DEFAULT 'ADMIN',
+  `date_creation` datetime NOT NULL DEFAULT current_timestamp(),
+  `dernier_login` datetime DEFAULT NULL,
+  `status` enum('ACTIF','INACTIF','SUSPENDU') NOT NULL DEFAULT 'ACTIF'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -99,15 +121,14 @@ CREATE TABLE `ENREGISTRER` (
 --
 
 CREATE TABLE `HISTORIQUE` (
-  `id_historique` int(11) NOT NULL AUTO_INCREMENT,
+  `id_historique` int(11) NOT NULL,
   `entity_type` varchar(50) NOT NULL COMMENT 'CLIENT, DOCUMENT, REGLEMENT, SERVICE',
   `entity_id` int(11) NOT NULL,
   `action` varchar(50) NOT NULL COMMENT 'CREATE, READ, UPDATE, DELETE',
   `details` text DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `date_action` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ip_address` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id_historique`)
+  `date_action` datetime NOT NULL DEFAULT current_timestamp(),
+  `ip_address` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -137,45 +158,23 @@ CREATE TABLE `SERVICE_PRODUIT` (
   `libelle` varchar(100) NOT NULL,
   `prix_de_vente` decimal(12,2) NOT NULL,
   `prix_achat` decimal(12,2) DEFAULT NULL,
-  `quantite_stock` int(11) DEFAULT NULL,
   `est_service` tinyint(1) NOT NULL DEFAULT 0,
-  `description` text DEFAULT NULL
+  `description` text DEFAULT NULL,
+  `quantite_stock` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-
-
--- 
--- table admin
--- 
-
-CREATE TABLE `ADMIN` (
-  `id_admin` INT(11) NOT NULL,
-  `nom` VARCHAR(50) NOT NULL,
-  `prenom` VARCHAR(50) DEFAULT NULL,
-  `username` VARCHAR(50) NOT NULL UNIQUE,
-  `telephone` VARCHAR(20) DEFAULT NULL,
-  `email` VARCHAR(100) DEFAULT NULL,
-  `mot_de_passe` VARCHAR(255) NOT NULL,
-  `role` ENUM('SUPER_ADMIN', 'ADMIN', 'GESTIONNAIRE') NOT NULL DEFAULT 'ADMIN',
-  `date_creation` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `dernier_login` DATETIME DEFAULT NULL,
-  `status` ENUM('ACTIF', 'INACTIF', 'SUSPENDU') NOT NULL DEFAULT 'ACTIF'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-ALTER TABLE `ADMIN`
-  ADD PRIMARY KEY (`id_admin`),
-  ADD KEY `idx_admin_username` (`username`),
-  ADD KEY `idx_admin_email` (`email`);
-
-ALTER TABLE `ADMIN`
-  MODIFY `id_admin` INT(11) NOT NULL AUTO_INCREMENT;
-
 
 --
 -- Index pour les tables déchargées
 --
+
+--
+-- Index pour la table `ADMIN`
+--
+ALTER TABLE `ADMIN`
+  ADD PRIMARY KEY (`id_admin`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD KEY `idx_admin_username` (`username`),
+  ADD KEY `idx_admin_email` (`email`);
 
 --
 -- Index pour la table `CAISSE`
@@ -217,8 +216,7 @@ ALTER TABLE `ENREGISTRER`
 -- Index pour la table `HISTORIQUE`
 --
 ALTER TABLE `HISTORIQUE`
-  ADD PRIMARY KEY (`id_historique`),
-  ADD KEY `HISTORIQUE_reglement_FK` (`id_reglement`);
+  ADD PRIMARY KEY (`id_historique`);
 
 --
 -- Index pour la table `REGLEMENT`
@@ -239,46 +237,52 @@ ALTER TABLE `SERVICE_PRODUIT`
 --
 
 --
+-- AUTO_INCREMENT pour la table `ADMIN`
+--
+ALTER TABLE `ADMIN`
+  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT pour la table `CAISSE`
 --
 ALTER TABLE `CAISSE`
-  MODIFY `id_caisse` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_caisse` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `CLIENT`
 --
 ALTER TABLE `CLIENT`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pour la table `DETAIL_DOCUMENT`
 --
 ALTER TABLE `DETAIL_DOCUMENT`
-  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT pour la table `DOCUMENT`
 --
 ALTER TABLE `DOCUMENT`
-  MODIFY `id_document` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_document` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT pour la table `HISTORIQUE`
 --
 ALTER TABLE `HISTORIQUE`
-  MODIFY `id_historique` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_historique` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=164;
 
 --
 -- AUTO_INCREMENT pour la table `REGLEMENT`
 --
 ALTER TABLE `REGLEMENT`
-  MODIFY `id_reglement` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_reglement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT pour la table `SERVICE_PRODUIT`
 --
 ALTER TABLE `SERVICE_PRODUIT`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Contraintes pour les tables déchargées
@@ -303,12 +307,6 @@ ALTER TABLE `DOCUMENT`
 ALTER TABLE `ENREGISTRER`
   ADD CONSTRAINT `ENREGISTRER_caisse_FK` FOREIGN KEY (`id_caisse`) REFERENCES `CAISSE` (`id_caisse`) ON UPDATE CASCADE,
   ADD CONSTRAINT `ENREGISTRER_reglement_FK` FOREIGN KEY (`id_reglement`) REFERENCES `REGLEMENT` (`id_reglement`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Contraintes pour la table `HISTORIQUE`
---
-ALTER TABLE `HISTORIQUE`
-  ADD CONSTRAINT `HISTORIQUE_reglement_FK` FOREIGN KEY (`id_reglement`) REFERENCES `REGLEMENT` (`id_reglement`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `REGLEMENT`
