@@ -24,8 +24,10 @@ $sqlDoc = "SELECT COUNT(*) as total FROM DOCUMENT WHERE status != 'PAYE'";
 $resDoc = mysqli_query($db, $sqlDoc);
 $nbFacturesAttente = mysqli_fetch_assoc($resDoc)['total'];
 
-// Chiffre d'affaires (Total des règlements)
-$sqlCA = "SELECT SUM(montant) as total FROM REGLEMENT";
+// Chiffre d'affaires (Total des règlements MOIS EN COURS)
+$sqlCA = "SELECT SUM(montant) as total FROM REGLEMENT 
+          WHERE MONTH(date_reglement) = MONTH(CURRENT_DATE()) 
+          AND YEAR(date_reglement) = YEAR(CURRENT_DATE())";
 $resCA = mysqli_query($db, $sqlCA);
 $caTotal = mysqli_fetch_assoc($resCA)['total'] ?? 0;
 
@@ -36,6 +38,26 @@ $sqlLastDocs = "SELECT d.id_document, d.numero_d, d.date_creation, d.montant_tot
                 ORDER BY d.date_creation DESC LIMIT 5";
 $resLastDocs = mysqli_query($db, $sqlLastDocs);
 
+// --- NOUVEAU: Ventes de la journée (Documents créés aujourd'hui) ---
+$sqlDaily = "SELECT SUM(montant_total) as total 
+             FROM DOCUMENT 
+             WHERE DATE(date_creation) = CURDATE()";
+$resDaily = mysqli_query($db, $sqlDaily);
+$dailySales = mysqli_fetch_assoc($resDaily)['total'] ?? 0;
+
+// --- NOUVEAU: Estimation du Bénéfice Net (Sur Total Ventes MOIS EN COURS) ---
+// Note: Utilise le prix d'achat actuel du produit
+$sqlProfit = "SELECT SUM( (dd.prix_unitaire - sp.prix_achat) * dd.quantite ) as profit
+              FROM DETAIL_DOCUMENT dd
+              JOIN SERVICE_PRODUIT sp ON dd.id_service_produit = sp.id
+              JOIN DOCUMENT d ON dd.id_document = d.id_document
+              WHERE d.status != 'ANNULE'
+              AND MONTH(d.date_creation) = MONTH(CURRENT_DATE())
+              AND YEAR(d.date_creation) = YEAR(CURRENT_DATE())";
+$resProfit = mysqli_query($db, $sqlProfit);
+$netProfit = mysqli_fetch_assoc($resProfit)['profit'] ?? 0;
+// Si profit négatif (possible si prix achat > vente), on affiche quand même ou 0? Affichons le réel.
+
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +66,7 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - MobileMoney Facturation</title>
+    <title>Application de gestion</title>
 
     <!-- Font Awesome Icons -->
     <!-- Font Awesome Icons (Local) -->
@@ -66,7 +88,7 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
         <!-- ================= SIDEBAR (NAVIGATION) ================= -->
         <nav class="sidebar">
             <div class="sidebar-header">
-                <h2>FacturationApp</h2>
+                <h2>Application de gestion</h2>
             </div>
 
             <?php 
@@ -298,20 +320,36 @@ $resLastDocs = mysqli_query($db, $sqlLastDocs);
                     </div>
                 </div>
 
-                <!-- Card 2: Chiffre d'affaires -->
+                <!-- Card 2: Chiffre d'affaires & Bénefice -->
                 <div class="card">
                     <div class="stat-card">
                         <div class="stat-icon money-color">
                             <i class="fa fa-money-bill-wave"></i>
                         </div>
                         <div class="stat-details">
-                            <h3>Chiffre d'affaires</h3>
+                            <h3>Chiffre d'affaires (Mois)</h3>
                             <p class="number"><?php echo number_format($caTotal, 0, ',', ' '); ?> FCFA</p>
+                            <p style="font-size: 0.8rem; color: var(--success-color); margin-top: 5px;">
+                                <i class="fa fa-arrow-up"></i> Bénéfice: <?php echo number_format($netProfit, 0, ',', ' '); ?> FCFA
+                            </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 3: Factures en attente -->
+                <!-- Card 3 (NEW): Ventes Aujourd'hui -->
+                <div class="card">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(153, 102, 255, 0.2); color: #9966FF;">
+                            <i class="fa fa-chart-bar"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Ventes Aujourd'hui</h3>
+                            <p class="number"><?php echo number_format($dailySales, 0, ',', ' '); ?> FCFA</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Factures en attente -->
                 <div class="card">
                     <div class="stat-card">
                         <div class="stat-icon invoice-color">

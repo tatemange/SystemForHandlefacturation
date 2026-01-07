@@ -53,4 +53,54 @@ class HistoriqueModel
         $result = mysqli_stmt_get_result($stmt);
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
+
+    // Advanced Filtering
+    public function getFilteredLogs($filters = [], $limit = 50, $offset = 0) {
+        $sql = "SELECT * FROM $this->table WHERE 1=1";
+        $types = "";
+        $params = [];
+
+        // Entity Type
+        if (!empty($filters['entity_type'])) {
+            $sql .= " AND entity_type = ?";
+            $types .= "s";
+            $params[] = $filters['entity_type'];
+        }
+
+        // Search Term (Action, Details)
+        if (!empty($filters['search'])) {
+            $sql .= " AND (details LIKE ? OR action LIKE ? OR entity_type LIKE ?)";
+            $termLike = "%" . $filters['search'] . "%";
+            $types .= "sss";
+            $params[] = $termLike;
+            $params[] = $termLike;
+            $params[] = $termLike;
+        }
+
+        // Date Range
+        if (!empty($filters['start_date'])) {
+            $sql .= " AND date_action >= ?";
+            $types .= "s";
+            $params[] = $filters['start_date'] . " 00:00:00";
+        }
+        if (!empty($filters['end_date'])) {
+            $sql .= " AND date_action <= ?";
+            $types .= "s";
+            $params[] = $filters['end_date'] . " 23:59:59";
+        }
+
+        $sql .= " ORDER BY date_action DESC LIMIT ? OFFSET ?";
+        $types .= "ii";
+        $params[] = $limit;
+        $params[] = $offset;
+
+        $stmt = mysqli_prepare($this->conn, $sql);
+        if ($types && $params) {
+            mysqli_stmt_bind_param($stmt, $types, ...$params);
+        }
+        
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
 }

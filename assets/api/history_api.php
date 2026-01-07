@@ -23,19 +23,22 @@ if ($method === 'GET') {
     $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 50;
     $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
     
-    // Recherche
-    if (isset($_GET['search']) && !empty($_GET['search'])) {
-        $term = $_GET['search'];
-        $logs = $historyModel->search($term);
-    } 
-    // Filtrage Type (si pas de recherche global active, ou combiné? User said search query DB. Usually search overrides filter or combines. Let's assume search overrides for now or filters are cleared)
-    elseif (isset($_GET['entity_type']) && !empty($_GET['entity_type'])) {
-        $logs = $historyModel->getByEntityType($_GET['entity_type'], $limit, $offset);
-    } 
-    // Défaut
-    else {
-        $logs = $historyModel->getAll($limit, $offset);
+    // Collect Filters
+    $filters = [];
+    if (isset($_GET['entity_type']) && !empty($_GET['entity_type'])) {
+        $filters['entity_type'] = $_GET['entity_type'];
     }
+    if (isset($_GET['search']) && !empty($_GET['search'])) {
+        $filters['search'] = $_GET['search'];
+    }
+    if (isset($_GET['start_date']) && !empty($_GET['start_date'])) {
+        $filters['start_date'] = $_GET['start_date'];
+    }
+    if (isset($_GET['end_date']) && !empty($_GET['end_date'])) {
+        $filters['end_date'] = $_GET['end_date'];
+    }
+
+    $logs = $historyModel->getFilteredLogs($filters, $limit, $offset);
     
     echo json_encode(['status' => 'success', 'data' => $logs, 'count' => count($logs)]);
     exit;

@@ -42,7 +42,7 @@ $clientModel = new ClientModel($db->conn);
 $client = $clientModel->getById($doc['id_client']);
 
 // 3. Infos entreprise
-$companyName = "CISCO informatique";
+$companyName = "Gestion application";
 $companyAddress = "Bafoussam, Cameroun";
 $companyPhone = ""; // Demande utilisateur: "tu ne met rien"
 

@@ -11,6 +11,14 @@
         <option value="SERVICE">Services</option>
     </select>
     
+    <!-- Date Range Filters -->
+    <div style="display:flex; gap:0.5rem; align-items:center;">
+        <input type="date" id="startDate" title="Date de début" style="padding: 0.35rem; border-radius: 5px; border: 1px solid #ccc;">
+        <span style="color:var(--label-second)">à</span>
+        <input type="date" id="endDate" title="Date de fin" style="padding: 0.35rem; border-radius: 5px; border: 1px solid #ccc;">
+    </div>
+    
+    
     <!-- Search Input -->
     <div class="search-box" style="position: relative;">
         <input type="text" id="searchHistory" placeholder="Rechercher..." class="search_h">
@@ -68,7 +76,12 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         const filterSelect = document.getElementById('filterEntity');
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+
         filterSelect.addEventListener('change', () => resetAndLoad());
+        startDateInput.addEventListener('change', () => resetAndLoad());
+        endDateInput.addEventListener('change', () => resetAndLoad());
         
         // Search Input Logic
         const searchInput = document.getElementById('searchHistory');
@@ -148,11 +161,15 @@
 
         let url = `assets/api/history_api.php?limit=${LIMIT}&offset=${currentOffset}`;
         
-        if (searchTerm) {
-            url = `assets/api/history_api.php?search=${encodeURIComponent(searchTerm)}`;
-        } else if (filter) {
-            url += `&entity_type=${filter}`;
-        }
+        // Add Filters
+        if (filter) url += `&entity_type=${filter}`;
+        if (searchTerm) url += `&search=${encodeURIComponent(searchTerm)}`;
+        
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        
+        if (startDate) url += `&start_date=${startDate}`;
+        if (endDate) url += `&end_date=${endDate}`;
 
         try {
             const response = await fetch(url);
@@ -462,4 +479,14 @@
   #historyModal .close-modal:hover {
       color: var(--first-color);
   }
+  #startDate, #endDate {
+    padding: 0 1rem !important;
+    border-radius: 30px !important;
+    height: 32px;
+    outline: none;
+    border: none;
+    border: var(--border) !important;
+    background-color: transparent;
+    color: var(--label);
+}
 </style>
